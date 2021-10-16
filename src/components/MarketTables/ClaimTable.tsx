@@ -1,45 +1,37 @@
 import {
-  Bids,
+  Claimed,
+  ClaimedPrefix,
   Client,
   ClientSuffix,
+  DetailsButton,
+  OkIcon,
   Row,
-  Table,
-  MoneyIcon,
-  StartsButton
+  Table
 } from './layout'
 
 export const ClaimTable = () => {
   return (
     <Table>
       <Row>
-        <Client>fil<ClientSuffix>.near</ClientSuffix></Client>
-        <Bids>27 bids</Bids>
-        <StartsButton>Starts from <MoneyIcon /> 8.83</StartsButton>
+        <Client>playerone<ClientSuffix>.near</ClientSuffix></Client>
+        <OkIcon />
+        <ClaimedPrefix>Claimed by</ClaimedPrefix>
+        <Claimed>onsails.near</Claimed>
+        <DetailsButton>View Details</DetailsButton>
       </Row>
       <Row>
-        <Client>gandalf<ClientSuffix>.near</ClientSuffix></Client>
-        <Bids>15 bids</Bids>
-        <StartsButton>Starts from <MoneyIcon /> 9.20</StartsButton>
+        <Client>rar<ClientSuffix>.near</ClientSuffix></Client>
+        <OkIcon />
+        <ClaimedPrefix>Claimed by</ClaimedPrefix>
+        <Claimed>fil.near</Claimed>
+        <DetailsButton>View Details</DetailsButton>
       </Row>
       <Row>
-        <Client>moonglow<ClientSuffix>.near</ClientSuffix></Client>
-        <Bids>50 bids</Bids>
-        <StartsButton>Starts from <MoneyIcon /> 19.08</StartsButton>
-      </Row>
-      <Row>
-        <Client>narntt<ClientSuffix>.near</ClientSuffix></Client>
-        <Bids>16 bids</Bids>
-        <StartsButton>Starts from <MoneyIcon /> 5.03</StartsButton>
-      </Row>
-      <Row>
-        <Client>aim<ClientSuffix>.near</ClientSuffix></Client>
-        <Bids>16 bids</Bids>
-        <StartsButton>Starts from <MoneyIcon /> 110.21</StartsButton>
-      </Row>
-      <Row>
-        <Client>fbr<ClientSuffix>.near</ClientSuffix></Client>
-        <Bids>18 bids</Bids>
-        <StartsButton>Starts from <MoneyIcon /> 7.71</StartsButton>
+        <Client>future<ClientSuffix>.near</ClientSuffix></Client>
+        <OkIcon />
+        <ClaimedPrefix>Claimed by</ClaimedPrefix>
+        <Claimed>narn.near</Claimed>
+        <DetailsButton>View Details</DetailsButton>
       </Row>
     </Table>
   )

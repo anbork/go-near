@@ -115,6 +115,8 @@ export const MenuItem = styled(Link)<{active?: boolean}>`
   }
 
   @media (max-width: ${break_down}) {
+    height: 40px;
+    line-height: 40px;
     text-align: center;
     font-weight: bold;
     font-size: 45px;

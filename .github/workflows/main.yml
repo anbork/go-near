@@ -19,6 +19,6 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@4.1.5
         with:
           branch: master
-          folder: frontend/build
+          folder: build
           repository-name: Kikimora-Labs/go-near-name-pages
           ssh-key: ${{ secrets.SSH_KEY_MASTER }}

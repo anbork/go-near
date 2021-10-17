@@ -1,9 +1,12 @@
-import {FC} from 'react'
 import styled from 'styled-components'
 
-import ok_png from 'assets/images/ok.png'
-import money_png from 'assets/images/money.png'
+import right_png from 'assets/images/right.png'
 import {break_down} from 'helpers/media'
+import {
+  MoneyIcon as MoneyIconBase,
+  OkIcon as OkIconBase
+} from 'components/Icons'
+import {BorderButton, GreyButton} from 'components/Core' 
 
 export const TableTitle = styled.div`
   margin-top: 50px;
@@ -69,24 +72,14 @@ export const ClientSuffix = styled.span`
   color: #8C95A6;
 `
 
-export const OkIcon = styled.img`
-  width: 28px;
-  height: 28px;
-  object-fit: contain;
-
+export const OkIcon = styled(OkIconBase)`
   @media (max-width: ${break_down}) {
-    width: 20px;
-    height: 20px;
     grid-column: 3;
     grid-row: 1 / 3;
     align-self: center;
     margin-left: 10px;
   }
 `
-
-OkIcon.defaultProps = {
-  src: ok_png
-}
 
 export const Claimed = styled.div`
   font-size: 16px;
@@ -121,26 +114,13 @@ export const ClaimedPrefix = styled.div`
   }
 `
 
-export const DetailsButton = styled.div`
+export const DetailsButton = styled(GreyButton)`
   margin-left: 26px;
   width: 228px;
-  height: 67px;
-  background: #2C3139;
-  border-radius: 17px;
-  text-align: center;
-  line-height: 67px;
-  font-weight: bold;
-  font-size: 16px;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  color: #ffffff;
 
   @media (max-width: ${break_down}) {
     margin-left: 0;
     width: auto;
-    font-size: 12px;
-    font-weight: normal;
     background: none;
     grid-column: 1;
     grid-row: 2;
@@ -153,13 +133,15 @@ export const DetailsButton = styled.div`
     cursor: pointer;
 
     &::after {
-      content: '>';
-      padding-left: 2px;
-      padding-top: 1px;
-      position: relative;
-      top: 1px;
+      content: ' ';
+      width: 8px;
+      height: 8px;
+      padding-left: 8px;
+      background-image: url(${right_png});
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: 8px 8px;
     }
-  }
 `
 
 export const Bids = styled.div`
@@ -178,73 +160,19 @@ export const Bids = styled.div`
   }
 `
 
+export const MoneyIcon = styled(MoneyIconBase)`
+  margin: 0 8px;
+`
 
-const StartsButtonBack = styled.div`
+export const StartsButton = styled(BorderButton)`
   margin-left: 26px;
   width: 228px;
-  height: 67px;
-  background: linear-gradient(to right, rgba(235, 234, 255, 1), rgba(207, 226, 255, 1), rgba(218, 222, 255, 1), rgba(255, 200, 249, 1));
-  border-radius: 17px;
 
   @media (max-width: ${break_down}) {
     margin-left: 0;
-    width: 170px;
-    height: 40px;
-    border-radius: 10px;
+    width: 180px;
     grid-column: 2;
     grid-row: 1 / 3;
     align-self: center;
   }
 `
-
-const StartsButtonBase = styled.button`
-  margin-top: 1px;
-  margin-left: 1px;
-  width: 226px;
-  height: 65px;
-  background: var(--root-background);
-  border-radius: 16px;
-  text-align: center;
-  line-height: 65px;
-  font-weight: bold;
-  font-size: 16px;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  @media (max-width: ${break_down}) {
-    width: 168px;
-    height: 38px;
-    line-height: 38px;
-    border-radius: 9px;
-    font-weight: 600;
-    font-size: 13px;
-  }
-`
-
-export const MoneyIcon = styled.img`
-  width: 25px;
-  height: 25px;
-  margin: 0 8px;
-  object-fit: contain;
-
-  @media (max-width: ${break_down}) {
-    width: 20px;
-    height: 20px;
-  }
-`
-
-MoneyIcon.defaultProps = {
-  src: money_png
-}
-
-
-export const StartsButton: FC<{}> = ({children}) => (
-  <StartsButtonBack>
-    <StartsButtonBase>{children}</StartsButtonBase>
-  </StartsButtonBack>
-)

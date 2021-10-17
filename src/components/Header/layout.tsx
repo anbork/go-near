@@ -184,6 +184,3 @@ export const Line = styled.div`
   grid-column: 1 / 4;
   grid-row: 2;
 `
-
-export const hideScroll = (open: boolean) =>
-  document.body.style.overflowY = open ? 'hidden' : 'auto'

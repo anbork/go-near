@@ -25,6 +25,10 @@ export const InnerContainer = styled.div`
   grid-template-columns: auto;
   grid-template-rows: var(--header-height) auto;
   justify-items: stretch;
+
+  @media (max-width: 1439px) {
+    grid-template-rows: var(--header-height__mob) auto;
+  }
 `
 
 export const Light = styled(LightSVG)`

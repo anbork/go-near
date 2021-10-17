@@ -58,6 +58,7 @@ export const ClientSuffix = styled.span`
 export const Bids = styled.div`
   font-size: 16px;
   color: #8C95A6;
+  font-weight: normal;
 
   @media (max-width: ${break_down}) {
     font-size: 12px;

@@ -6,7 +6,7 @@ import {
   MoneyIcon as MoneyIconBase,
   OkIcon as OkIconBase
 } from 'components/Icons'
-import {BorderButton, GreyButton} from 'components/Core' 
+import {BorderButton, GreyButton} from 'components/Core'
 
 export const TableTitle = styled.div`
   margin-top: 50px;

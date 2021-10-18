@@ -4,7 +4,7 @@ import {RainbowButton} from 'components/Core'
 import {break_down} from 'helpers/media'
 
 export const Container = styled.div`
-  margin: 116px var(--margin) 150px;
+  margin: 116px var(--margin) 30px;
   display: grid;
   grid-template-columns: 1fr 465px 1fr 435px 2fr;
 
@@ -17,10 +17,12 @@ export const Container = styled.div`
 `
 
 export const Main = styled.div`
+  grid-row: 1;
   grid-column: 2;
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  z-index: 2;
 `
 
 export const Title = styled.div`
@@ -61,10 +63,12 @@ export const DetailsTwo = styled(DetailsOne)`
 
 export const Form = styled.div`
   margin-top: 16px;
+  grid-row: 1;
   grid-column: 4;
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  z-index: 2;
 
   @media (max-width: ${break_down}) {
     margin-top: 33px;

@@ -1,20 +1,28 @@
 import {FC} from 'react'
+
 import {
   InnerContainer,
   OuterContainer,
   Content,
   Header,
-  Light
+  Light,
+  BackgroundOffer,
+  BackgroundRules
 } from './layout'
+import {useRouteCheck, CheckState} from 'helpers/routes'
 
 export const Layout: FC<{}> = ({children}) => {
+  const {isMarket, isOffer, isRules} = useRouteCheck() as CheckState
+
   return (
     <OuterContainer>
-    <InnerContainer>
-      <Header />
-      <Light />
-      <Content>{children}</Content>
-    </InnerContainer>
+      {isOffer && <BackgroundOffer />}
+      {isRules && <BackgroundRules />}
+      <InnerContainer>
+        <Header />
+        <Light />
+        <Content>{children}</Content>
+      </InnerContainer>
     </OuterContainer>
   )
 }

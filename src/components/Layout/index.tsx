@@ -12,7 +12,7 @@ import {
 import {useRouteCheck, CheckState} from 'helpers/routes'
 
 export const Layout: FC<{}> = ({children}) => {
-  const {isMarket, isOffer, isRules} = useRouteCheck() as CheckState
+  const {isOffer, isRules} = useRouteCheck() as CheckState
 
   return (
     <OuterContainer>

@@ -12,8 +12,10 @@ import {
   MenuItem
 } from './layout'
 import {useRouteCheck, CheckState, useOpen} from 'helpers/routes'
+import {useToProfile} from 'helpers/routes'
 
 export const Header: FC<{className?: any}> = ({className}) => {
+  const toProfile = useToProfile()
   const {isMarket, isOffer, isRules} = useRouteCheck() as CheckState
   const [open, setOpen] = useOpen()
 
@@ -27,7 +29,7 @@ export const Header: FC<{className?: any}> = ({className}) => {
         <MenuItem onClick={() => setOpen(false)} to="/rules" active={isRules}>{open ? 'Rules' : 'How it works'}</MenuItem>
       </Menu>
       <Auth open={open}>
-        <UserName>narntt.near</UserName>
+        <UserName onClick={toProfile}>narntt.near</UserName>
         <LogOut />
       </Auth>
       <Line />

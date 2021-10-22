@@ -5,8 +5,11 @@ import {
   ActiveTitle,
 } from './layout'
 import {ActiveTable, ClaimTable} from 'components/MarketTables'
+import {useTopScroll} from 'helpers/hooks'
 
 export const Market = () => {
+  useTopScroll()
+  
   return (
     <Container>
       <Title>Market</Title>

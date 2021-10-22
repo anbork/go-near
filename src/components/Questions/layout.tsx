@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 import {break_down} from 'helpers/media'
-import arrow_close_png from 'assets/images/arrow_close2.png'
+import arrow_close_png from 'assets/images/arrow_close.png'
 import arrow_open_png from 'assets/images/arrow_open.png'
 
 export const Container = styled.div`

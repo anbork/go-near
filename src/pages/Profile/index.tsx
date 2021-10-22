@@ -19,8 +19,10 @@ import {
 } from './layout'
 import {useToMarket} from 'helpers/routes'
 import {ProfileTable} from 'components/ProfileTable'
+import {useTopScroll} from 'helpers/hooks'
 
 export const Profile = () => {
+  useTopScroll()
   const toMarket = useToMarket()
 
   return (

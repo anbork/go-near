@@ -297,6 +297,7 @@ export const CompetitorsFounded = styled.div`
 
 export const FoundedName = styled.span`
   color: #FF9494;
+  cursor: pointer;
 `
 
 export const Table = styled(CompetitorsTable)``

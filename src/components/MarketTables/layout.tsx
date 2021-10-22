@@ -56,6 +56,7 @@ export const Client = styled.div`
   flex: 1 0;
   font-weight: bold;
   font-size: 30px;
+  cursor: pointer;
 
   @media (max-width: ${break_down}) {
     grid-column: 1;
@@ -84,6 +85,7 @@ export const OkIcon = styled(OkIconBase)`
 export const Claimed = styled.div`
   font-size: 16px;
   margin-left: 6px;
+  cursor: pointer;
 
   @media (max-width: ${break_down}) {
     margin-left: 0;

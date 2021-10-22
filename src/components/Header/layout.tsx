@@ -155,6 +155,7 @@ export const UserName = styled.div`
   font-weight: 500;
   font-size: 14px;
   margin-right: 12px;
+  cursor: pointer;
 
   @media (max-width: ${break_down}) {
     margin-right: 0;

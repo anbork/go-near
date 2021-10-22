@@ -128,7 +128,6 @@ BreadDot.defaultProps = {
 export const Cards = styled.div`
   margin-top: 45px;
   display: flex;
-  gap: 23px;
   justify-content: stretch;
   flex-wrap: nowrap;
 
@@ -142,19 +141,19 @@ export const Cards = styled.div`
 
 const bagBack = `
   background-image: url(${bag_png});
-  background-position: top 45px left 171px;
+  background-position: top 0px right 0px;
   background-size: 262px 180px;
 
   @media (max-width: ${break_down}) {
     background-image: url(${bag_min_png});
-    background-position: top 13px left 20px;
+    background-position: top 0px left 20px;
     background-size: 180px 180px;
   }
 `
 
 const coinBack = `
   background-image: url(${coin_png});
-  background-position: top 42px left 174px;
+  background-position: top 0px right 0px;
   background-size: 230px 180px;
 
   @media (max-width: ${break_down}) {
@@ -166,7 +165,7 @@ const coinBack = `
 
 const cupBack = `
   background-image: url(${cup_png});
-  background-position: top 15px left 145px;
+  background-position: top 0px right 0px;
   background-size: 261px 180px;
 
   @media (max-width: ${break_down}) {
@@ -199,6 +198,10 @@ export const Card = styled.div<{type: string}>`
     &:last-child {
       margin-right: var(--margin__mob);
     }
+  }
+
+  &:not(:first-child) {
+    margin-left: 23px;
   }
 `
 

@@ -31,9 +31,13 @@ import {
   Table
 } from './layout'
 import {useToMarket, useProductType} from 'helpers/routes'
+import {useTopScroll} from 'helpers/hooks'
+import {useToProfile} from 'helpers/routes'
 
 export const Product = () => {
+  useTopScroll()
   const toMarket = useToMarket()
+  const toProfile = useToProfile()
   const type = useProductType()
 
   return (
@@ -74,7 +78,7 @@ export const Product = () => {
       </Main>
       <Competitors>
         <CompetitorsTitle>Competitors</CompetitorsTitle>
-        <CompetitorsFounded>Founded by: <FoundedName>luozhiwei.near</FoundedName></CompetitorsFounded>
+        <CompetitorsFounded>Founded by: <FoundedName onClick={toProfile}>luozhiwei.near</FoundedName></CompetitorsFounded>
         <Table />
       </Competitors>
     </Container>

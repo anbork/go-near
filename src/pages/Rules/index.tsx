@@ -4,8 +4,11 @@ import {
   Title
 } from './layout'
 import {Questions} from 'components/Questions'
+import {useTopScroll} from 'helpers/hooks'
 
 export const Rules = () => {
+  useTopScroll()
+
   return (
     <Container>
       <Title>How it works</Title>

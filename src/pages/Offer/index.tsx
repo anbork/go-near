@@ -15,10 +15,12 @@ import {
   Input,
   InputSuffix
 } from './layout'
+import {useTopScroll} from 'helpers/hooks'
 
 export const Offer = () => {
   const [offer, setOffer] = useState('narn')
   const [reward, setReward] = useState('vlad')
+  useTopScroll()
 
   return (
     <Container>

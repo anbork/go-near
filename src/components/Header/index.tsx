@@ -24,9 +24,9 @@ export const Header: FC<{className?: any}> = ({className}) => {
       <MenuButton open={open} onClick={() => setOpen(!open)} />
       <Brand />
       <Menu open={open}>
-        <MenuItem onClick={() => setOpen(false)} to="/" active={isMarket}>Market</MenuItem>
-        <MenuItem onClick={() => setOpen(false)} to="/offer" active={isOffer}>Offer</MenuItem>
-        <MenuItem onClick={() => setOpen(false)} to="/rules" active={isRules}>{open ? 'Rules' : 'How it works'}</MenuItem>
+        <MenuItem onClick={() => setOpen(false)} to="/" $active={isMarket}>Market</MenuItem>
+        <MenuItem onClick={() => setOpen(false)} to="/offer" $active={isOffer}>Offer</MenuItem>
+        <MenuItem onClick={() => setOpen(false)} to="/rules" $active={isRules}>{open ? 'Rules' : 'How it works'}</MenuItem>
       </Menu>
       <Auth open={open}>
         <UserName onClick={toProfile}>narntt.near</UserName>

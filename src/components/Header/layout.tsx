@@ -101,14 +101,14 @@ const menuItemActiveMob = `
   color: #FFFFFF;
 `
 
-export const MenuItem = styled(Link)<{active?: boolean}>`
+export const MenuItem = styled(Link)<{$active?: boolean}>`
   height: var(--header-height);
   line-height: var(--header-height);
   color: #ffffff;
   text-decoration: none;
   font-weight: 600;
   font-size: 14px;
-  ${({active}) => active ? menuItemActive : ''}
+  ${({$active}) => $active ? menuItemActive : ''}
 
   &:not(:first-child) {
     margin-left: 40px;
@@ -121,7 +121,7 @@ export const MenuItem = styled(Link)<{active?: boolean}>`
     font-weight: bold;
     font-size: 45px;
     color: #8C95A6;
-    ${({active}) => active ? menuItemActiveMob : ''}
+    ${({$active}) => $active ? menuItemActiveMob : ''}
 
     &:first-child {
       margin-top: 96px;

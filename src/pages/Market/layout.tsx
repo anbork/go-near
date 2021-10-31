@@ -1,6 +1,4 @@
 import styled from 'styled-components'
-
-import {TableTitle} from 'components/MarketTables'
 import {break_down} from 'helpers/media'
 
 export const Container = styled.div`
@@ -26,6 +24,21 @@ export const Title = styled.div`
     line-height: 40px;
     margin-top: 40px;
     font-size: 33px;
+  }
+`
+
+
+export const TableTitle = styled.div`
+  margin-top: 50px;
+  font-weight: 600;
+  font-size: 24px;
+  height: 36px;
+  line-height: 36px;
+  color: #8C95A6;
+
+  @media (max-width: ${break_down}) {
+    margin-top: 30px;
+    font-size: 15px;
   }
 `
 

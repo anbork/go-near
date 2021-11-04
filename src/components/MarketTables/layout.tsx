@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 
+import { RainbowButton } from 'components/Core'
 import right_png from 'assets/images/right.png'
 import {break_down} from 'helpers/media'
 import {
@@ -7,20 +8,6 @@ import {
   OkIcon as OkIconBase
 } from 'components/Icons'
 import {BorderButton, GreyButton} from 'components/Core'
-
-export const TableTitle = styled.div`
-  margin-top: 50px;
-  font-weight: 600;
-  font-size: 24px;
-  height: 36px;
-  line-height: 36px;
-  color: #8C95A6;
-
-  @media (max-width: ${break_down}) {
-    margin-top: 30px;
-    font-size: 15px;
-  }
-`
 
 export const Table = styled.div`
   margin-top: 30px;
@@ -113,6 +100,16 @@ export const ClaimedPrefix = styled.div`
     line-height: 21px;
     align-self: end;
     justify-self: end;
+  }
+`
+
+export const Button = styled(RainbowButton)`
+  margin-top: 52px;
+
+  @media (max-width: ${break_down}) {
+    margin-top: 29px;
+    font-weight: bold;
+    font-size: 16px;
   }
 `
 

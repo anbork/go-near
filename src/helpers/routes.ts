@@ -43,11 +43,11 @@ export const useOpen = (): [boolean, (_: boolean) => void] => {
   return [open, setOpen]
 }
 
-export const useToProduct = (type: string = 'one') => {
+export const useToBid = (bidId: string) => {
   const history = useHistory()
   
   return () => {
-    history.push(`/product?type=${type}`)
+    history.push(`/bid/${bidId}`)
   }
 }
 

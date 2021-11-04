@@ -1,24 +1,12 @@
 import { useState, useEffect } from 'react'
 import {
-  Bids,
-  Client,
-  ClientSuffix,
-  Claimed,
-  ClaimedPrefix,
-  DetailsButton,
-  OkIcon,
   Row,
   Table,
-  MoneyIcon,
-  StartsButton,
   Button
 } from './layout'
-import { useToProfile, useToProduct } from 'helpers/routes'
-import { fromNear } from 'helpers/near'
+import BidPreview from './BidPreview'
 
 export const MarketTable = ({ contractMethod, limit, type }: { contractMethod: any, limit: number, type: string }) => {
-  const toProfile = useToProfile()
-  const toProductTwo = useToProduct('two')
   const [feed, setFeed] = useState<any[]>([])
   const [hasMore, setHasMore] = useState(false)
 
@@ -30,6 +18,8 @@ export const MarketTable = ({ contractMethod, limit, type }: { contractMethod: a
     })
     if (bets.length === limit) {
       setHasMore(true)
+    } else {
+      setHasMore(false)
     }
     setFeed(feed => [...feed, ...bets]);
   }
@@ -42,24 +32,9 @@ export const MarketTable = ({ contractMethod, limit, type }: { contractMethod: a
 
 
   const bids = feed && feed.map(([bidPrice, bidId]) => {
-    const [prefix, postfix] = bidId.split('.')
-    bidPrice = fromNear(bidPrice).toFixed(2)
-
-    if (type === "claims")
-      return (
-        <Row key={bidId}>
-          <Client onClick={toProfile}>{prefix}<ClientSuffix>.{postfix}</ClientSuffix></Client>
-          <OkIcon />
-          <ClaimedPrefix>Claimed by</ClaimedPrefix>
-          <Claimed onClick={toProfile}>dna.near</Claimed>
-          <DetailsButton onClick={toProductTwo}>View Details</DetailsButton>
-        </Row>
-      )
     return (
       <Row key={bidId}>
-        <Client onClick={toProfile}>{prefix}<ClientSuffix>.{postfix}</ClientSuffix></Client>
-        <Bids></Bids>
-        <StartsButton>Starts from <MoneyIcon /> {bidPrice}</StartsButton>
+        <BidPreview bidId={bidId} type={type} />
       </Row>
     )
   })

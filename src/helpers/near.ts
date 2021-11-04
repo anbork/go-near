@@ -21,6 +21,7 @@ export interface INearProps {
   connected: boolean;
   wallet: nearAPI.WalletConnection;
   config: INearConfig;
+  api: nearAPI.Near;
   contract: any;
 }
 
@@ -57,11 +58,12 @@ export const connectNear = async (): Promise<INearProps> => {
     connected: true,
     wallet: walletConnection,
     config: nearConfig,
+    api: near,
     contract
   }
 }
 
-export const fromNear = (s: string) => parseFloat(s) / 1e24 || 0
+export const fromNear = (s: string) => (parseFloat(s) / 1e24 || 0) as number
 
 function getConfig(env: string): INearConfig {
   switch (env) {

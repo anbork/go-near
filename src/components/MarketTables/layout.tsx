@@ -141,10 +141,12 @@ export const DetailsButton = styled(GreyButton)`
       background-repeat: no-repeat;
       background-size: 8px 8px;
     }
+  }
 `
 
 export const Bids = styled.div`
   font-size: 16px;
+  text-align: right;
   color: #8C95A6;
 
   @media (max-width: ${break_down}) {
@@ -174,4 +176,9 @@ export const StartsButton = styled(BorderButton)`
     grid-row: 1 / 3;
     align-self: center;
   }
+`
+export const ProfitBlock = styled.div`
+  font-size: 14px;
+  font-weight: 400;
+  color: #fafafa;
 `

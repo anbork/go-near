@@ -18,8 +18,10 @@ export const Market = () => {
 
   const getStats = async () => {
     let global_stats = await near?.contract.get_global_stats()
-    if (global_stats) global_stats = mapStats(global_stats)
-    setStats(global_stats)
+    if (global_stats) {
+      global_stats = mapStats(global_stats)
+      setStats(global_stats)
+    }
   }
 
   useEffect(() => {

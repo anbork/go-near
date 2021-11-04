@@ -7,7 +7,7 @@ import {
   Value
 } from './layout'
 
-export const CompetitorsTable = () => {
+const CompetitorsTable = () => {
   return (
     <Table>
       <Row>
@@ -68,3 +68,5 @@ export const CompetitorsTable = () => {
     </Table>
   )
 }
+
+export default CompetitorsTable;

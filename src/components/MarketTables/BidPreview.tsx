@@ -39,7 +39,7 @@ const BidPreview = ({ bidId, type }: { bidId: string, type: string }) => {
   )
 
 
-  if (type === "claims")
+  if (bid.claimedBy)
     return (
       <>
         { accountName }

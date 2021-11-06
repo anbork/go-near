@@ -57,7 +57,7 @@ export const Title = styled.div`
   height: 130px;
   line-height: 130px;
   font-weight: bold;
-  font-size: 88px;
+  font-size: 78px;
 
   @media (max-width: ${break_down}) {
     height: 40px;
@@ -81,6 +81,17 @@ export const BalanceTitle = styled.div`
   line-height: 24px;
   font-weight: normal;
   font-size: 19px;
+
+  @media (max-width: ${break_down}) {
+    font-size: 15px;
+  }
+`
+
+export const ProfitableText = styled.div`
+  margin-top:5px;
+  line-height: 24px;
+  font-weight: 300;
+  font-size: 16px;
 
   @media (max-width: ${break_down}) {
     font-size: 15px;
@@ -149,6 +160,7 @@ export const ClaimButton = styled(RainbowButton)`
 export const WillButton = styled(GreyButton)`
   width: 298px;
   margin-bottom: 37px;
+  cursor: default;
 
   @media (max-width: ${break_down}) {
     width: auto;
@@ -327,4 +339,11 @@ export const ClaimedDateTime = styled.div`
     grid-row: 2;
     grid-column: 2 / 4;
   }
+`
+
+export const NotSafeText = styled.div`
+  margin-top: 25px;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 26px;
 `

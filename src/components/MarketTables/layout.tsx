@@ -177,7 +177,7 @@ export const StartsButton = styled(BorderButton)`
     align-self: center;
   }
 `
-export const ProfitBlock = styled.div`
+export const ProfitableText = styled.div`
   font-size: 14px;
   font-weight: 400;
   color: #fafafa;

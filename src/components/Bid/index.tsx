@@ -1,73 +1,105 @@
 import {
-  BackButton,
   Balance,
   BalanceButtons,
   BalanceDetails,
   BalanceMoneyIcon,
-  BalanceInvertIcon,
   BalanceTitle,
   BalanceValue,
-  BidButton,
-  ClaimButton,
   Main,
   Question,
   Rules,
   Text,
   Title,
-  WillButton,
-  WillPrefix,
-  WillTime,
   Claimed,
   ClaimedBy,
   ClaimedDateTime,
   ClaimedDot,
   ClaimedIcon,
-  ClaimedName
+  ClaimedName,
+  ProfitableText,
+  NotSafeText
 } from './layout'
 import Competitors from 'components/Competitors'
-import { useToMarket, useProductType } from 'helpers/routes'
+import { IBid, IBidSafety } from 'helpers/mappers'
+import { INearProps } from 'helpers/near'
+import Profitable from './Profitable'
+import { BetBtn, ClaimBtn, FinalizeBtn, AcquireBtn } from './BidActions'
 
-export const Bid = () => {
-  const toMarket = useToMarket()
-  const type = useProductType()
+
+
+export const Bid = ({ near, bidInfo, bidSafety }: { near: INearProps, bidInfo: IBid, bidSafety: IBidSafety}) => {
+  const isSafe = !bidInfo.isAtMarket || (bidSafety.codeHash === 'DKUq738xnns9pKjpv9GifM68UoFSmfnBYNp3hsfkkUFa' && bidSafety.accessKeysLen === 0 && bidSafety.lockerOwner === near.config.contractName)
+
+  const claimedTime = new Intl.DateTimeFormat('UK', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(bidInfo.claimedTime)
+
+  if (!isSafe)
+    return (
+      <Main>
+        <Title>{bidInfo.id}</Title>
+        <NotSafeText>
+          <h2>Account is not considered safe. What does it mean?</h2>
+          You are suggested not to participate with the bid.<br />
+          The validation consist of three steps to make sure everything is going properly under smart contract rules:
+          <ul>
+            <li>There must be a contract deployed onto the bid with hash equal to "DKUq738xnns9pKjpv9GifM68UoFSmfnBYNp3hsfkkUFa"</li>
+            <li>There must be no access keys</li>
+            <li>Owner of the locker must be equal to the account of the Marketplace {near.config.contractName}</li>
+          </ul>
+          The following conditions are found:
+          <ul>
+            <li>Hash of the contract is "{bidSafety.codeHash}"</li>
+            <li>There are {bidSafety.accessKeysLen} keys found</li>
+            <li>Owner of the locker is {bidSafety.lockerOwner}</li>
+          </ul>
+        </NotSafeText>
+      </Main>
+    )
+
+  if (!bidInfo.isAtMarket)
+    return (
+      <Main>
+        <Title>{bidInfo.id}</Title>
+        <Text>
+          <h2>Not here yet. Is it a good fit?</h2>
+        </Text>
+      </Main>
+    )
 
   return (
     <>
-      <BackButton onClick={toMarket} />
       <Main>
-        <Title>123</Title>
+        <Title>{bidInfo.id}</Title>
         <Balance>
           <BalanceTitle>Bid Balance:</BalanceTitle>
           <BalanceMoneyIcon />
-          <BalanceValue>3.50</BalanceValue>
+          <BalanceValue>{bidSafety.balance.toFixed(2)}</BalanceValue>
         </Balance>
+        
+        <Profitable bid={bidInfo} balance={bidSafety.balance}>
+          <ProfitableText>PROFITABLE! Bid balance is higher than claim price</ProfitableText>
+        </Profitable>
+        
         <BalanceDetails>You will possess all bid balance in case <br /> of successful claim</BalanceDetails>
-        {type === 'two' && (
+        {bidInfo.claimedBy && (
           <Claimed>
             <ClaimedIcon />
             <ClaimedBy>Claimed by</ClaimedBy>
-            <ClaimedName>onsails.near</ClaimedName>
+            <ClaimedName>{bidInfo.claimedBy}</ClaimedName>
             <ClaimedDot />
-            <ClaimedDateTime>04.10.21 at 8:35 PM</ClaimedDateTime>
+            <ClaimedDateTime>{claimedTime}</ClaimedDateTime>
           </Claimed>
         )}
-        <BalanceButtons type={type}>
-          {type === 'one' && (
-            <ClaimButton>Claim for <BalanceInvertIcon /> 15.426380</ClaimButton>
-          )}
-          {type === 'two' && (
-            <WillButton big>
-              <WillPrefix>Will be claimed after</WillPrefix>
-              <WillTime>06:10:47</WillTime>
-            </WillButton>
-          )}
-          <BidButton big>Bid <BalanceMoneyIcon /> 8.839357</BidButton>
+
+        <BalanceButtons>
+          <ClaimBtn bidInfo={bidInfo} near={near} />
+          <BetBtn bidInfo={bidInfo} near={near} />
         </BalanceButtons>
+
         <Question>What do the buttons mean?</Question>
         <Text>When you believe the bid is underestimated and will be claimed for higher price, choose «Bet» option. You will receive rewards for each bet on top of yours, or for successful claim — up to 50%. <br /><br /> When you want to claim the bid, choose «Claim» option. If no one overbid you in the next 72 hours, the bid will be yours.</Text>
         <Rules to="/rules">Read the full rules</Rules>
       </Main>
-      <Competitors />
+      <Competitors bidInfo={bidInfo} />
     </>
   )
 }

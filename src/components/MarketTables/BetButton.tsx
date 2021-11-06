@@ -3,7 +3,7 @@ import {
   Bids,
   StartsButton,
   MoneyIcon,
-  ProfitBlock
+  ProfitableText
 } from './layout'
 import { useToBid } from 'helpers/routes'
 import { IBid } from 'helpers/mappers'
@@ -32,10 +32,11 @@ const BetButton = ({ bid }: { bid: IBid }) => {
   return (
     <>
       <Bids>
-        {bidLength} {bidLength > 2 ? 'bids' : 'bid'}
-        <ProfitBlock>
-          <Profitable bid={bid} balance={balance}>Profitable</Profitable>
-        </ProfitBlock>
+        {bidLength} {bidLength > 1 ? 'bids' : 'bid'}
+        
+        <Profitable bid={bid} balance={balance}>
+          <ProfitableText>Profitable</ProfitableText>
+        </Profitable>
       </Bids>
       <StartsButton onClick={toBid}>Starts from <MoneyIcon /> {bid?.betPrice.toFixed(2) || 0}</StartsButton>
     </>

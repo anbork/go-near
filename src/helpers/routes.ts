@@ -59,15 +59,19 @@ export const useToProfile = () => {
   }
 }
 
+
+export const useToAcquire = (bidId: string) => {
+  const history = useHistory()
+
+  return () => {
+    history.push(`/acquire/${bidId}`)
+  }
+}
+
 export const useToMarket = () => {
   const history = useHistory()
   
   return () => {
     history.push(`/`)
   }
-}
-
-export const useProductType = () => {
-  const params = new URLSearchParams(useLocation().search)
-  return params.get('type')
 }

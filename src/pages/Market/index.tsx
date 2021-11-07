@@ -12,15 +12,24 @@ import { mapStats, IStat } from 'helpers/mappers'
 
 export const Market = () => {
   const [stats, setStats] = useState<IStat | null>(null)
+  const [filteredBids, setFilteredBids] = useState<string[]>([])
+
+  const filterActiveBids = (bidId: string) => {
+    if (!filteredBids.includes(bidId)) {
+      setFilteredBids((bids) => {
+        return [...bids, bidId]
+      })
+    }
+  }
+
   useTopScroll()
   
   const { near }: { near: INearProps | null } = useContext(NearContext)
 
   const getStats = async () => {
-    let global_stats = await near?.contract.get_global_stats()
-    if (global_stats) {
-      global_stats = mapStats(global_stats)
-      setStats(global_stats)
+    const globalstats = await near?.contract.get_global_stats()
+    if (globalstats) {
+      setStats(mapStats(globalstats))
     }
   }
 
@@ -31,16 +40,16 @@ export const Market = () => {
 
   if (!near || !stats) return null
   
-  let getTopBets = near.contract.get_top_bets
-  let getTopClaims = near.contract.get_top_claims
+  const getTopBets = near.contract.get_top_bets
+  const getTopClaims = near.contract.get_top_claims
 
   return (
     <Container>
       <Title>Market</Title>
-      <ClaimTitle>On Claim ({stats?.numBidsOnClaim})</ClaimTitle>
-      <MarketTable contractMethod={getTopClaims} limit={5} type={'claims'} />
-      <ActiveTitle>Active ({stats?.numBids})</ActiveTitle>
-      <MarketTable contractMethod={getTopBets} limit={25} type={'bets'} />
+      <ClaimTitle>On Claim ({stats.numBidsOnClaim})</ClaimTitle>
+      <MarketTable contractMethod={getTopClaims} limit={5} isClaimed={true} />
+      <ActiveTitle>Active ({stats.numBids - filteredBids.length})</ActiveTitle>
+      <MarketTable contractMethod={getTopBets} limit={25} isClaimed={false} filterActiveBids={filterActiveBids} />
     </Container>
   )
 }

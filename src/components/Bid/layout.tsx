@@ -131,7 +131,7 @@ export const BalanceDetails = styled.div`
   }
 `
 
-export const BalanceButtons = styled.div<{ type?: string } | any>`
+export const BidButtons = styled.div<{ type?: string } | any>`
   ${({ type }) => type === 'one' ? 'margin-top: 46px;' : 'margin-top: 22px;'}
   width: auto;
   display: flex;
@@ -145,9 +145,10 @@ export const BalanceButtons = styled.div<{ type?: string } | any>`
   }
 `
 
-export const ClaimButton = styled(RainbowButton)`
+export const ColoredButton = styled<{ disabled?: boolean } | any>(RainbowButton)`
   width: 246px;
   margin-bottom: 37px;
+  ${({ disabled }) => disabled ? 'opacity: 0.4; pointer-events: none;' : ''}
 
   @media (max-width: ${break_down}) {
     width: auto;
@@ -177,10 +178,11 @@ export const WillTime = styled.span`
   font-weight: bold;
 `
 
-export const BidButton = styled(BorderButton)`
+export const Button = styled<{ disabled?: boolean } | any>(BorderButton)`
   width: 190px;
   margin-left: 18px;
   margin-bottom: 37px;
+  ${({ disabled }) => disabled ? 'opacity: 0.4; pointer-events: none;' : ''}
 
   @media (max-width: ${break_down}) {
     margin-left: 0;
@@ -196,7 +198,7 @@ export const BidButton = styled(BorderButton)`
 export const Question = styled.div`
   margin-top: 20px;
   height: 28px;
-  line-hieght: 28px;
+  line-height: 28px;
   font-weight: 600;
   font-size: 16px;
   color: #8C95A6;

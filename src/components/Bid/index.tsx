@@ -1,6 +1,6 @@
 import {
   Balance,
-  BalanceButtons,
+  BidButtons,
   BalanceDetails,
   BalanceMoneyIcon,
   BalanceTitle,
@@ -20,14 +20,14 @@ import {
   NotSafeText
 } from './layout'
 import Competitors from 'components/Competitors'
-import { IBid, IBidSafety } from 'helpers/mappers'
+import { IBid, IBidSafety, IProfile } from 'helpers/mappers'
 import { INearProps } from 'helpers/near'
 import Profitable from './Profitable'
-import { BetBtn, ClaimBtn, FinalizeBtn, AcquireBtn } from './BidActions'
+import { AcquireBtn } from './BidActions'
+import Buttons from './Buttons'
 
 
-
-export const Bid = ({ near, bidInfo, bidSafety }: { near: INearProps, bidInfo: IBid, bidSafety: IBidSafety}) => {
+export const Bid = ({ near, bidInfo, bidSafety, profile }: { near: INearProps, bidInfo: IBid, bidSafety: IBidSafety, profile: IProfile | null}) => {
   const isSafe = !bidInfo.isAtMarket || (bidSafety.codeHash === 'DKUq738xnns9pKjpv9GifM68UoFSmfnBYNp3hsfkkUFa' && bidSafety.accessKeysLen === 0 && bidSafety.lockerOwner === near.config.contractName)
 
   const claimedTime = new Intl.DateTimeFormat('UK', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(bidInfo.claimedTime)
@@ -55,13 +55,25 @@ export const Bid = ({ near, bidInfo, bidSafety }: { near: INearProps, bidInfo: I
       </Main>
     )
 
+  const isMineAcquisition = profile?.acquisitions.some(id => bidInfo.id === id)
+  
   if (!bidInfo.isAtMarket)
     return (
       <Main>
         <Title>{bidInfo.id}</Title>
-        <Text>
-          <h2>Not here yet. Is it a good fit?</h2>
-        </Text>
+        { isMineAcquisition 
+          ?
+          <>
+            <h2>This account is your acquisition</h2>
+            <br />
+            <AcquireBtn bidInfo={bidInfo} />
+          </>
+          :
+          <Text>
+            <h2>Not here yet. Is it a good fit?</h2>
+          </Text>
+        }
+        
       </Main>
     )
 
@@ -90,10 +102,9 @@ export const Bid = ({ near, bidInfo, bidSafety }: { near: INearProps, bidInfo: I
           </Claimed>
         )}
 
-        <BalanceButtons>
-          <ClaimBtn bidInfo={bidInfo} near={near} />
-          <BetBtn bidInfo={bidInfo} near={near} />
-        </BalanceButtons>
+        <BidButtons>
+          <Buttons bidInfo={bidInfo} near={near} />
+        </BidButtons>
 
         <Question>What do the buttons mean?</Question>
         <Text>When you believe the bid is underestimated and will be claimed for higher price, choose «Bet» option. You will receive rewards for each bet on top of yours, or for successful claim — up to 50%. <br /><br /> When you want to claim the bid, choose «Claim» option. If no one overbid you in the next 72 hours, the bid will be yours.</Text>

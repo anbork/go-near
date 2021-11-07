@@ -1,6 +1,7 @@
 
 import { useContext, useEffect, useState } from 'react';
 import {
+  Row,
   Client,
   ClientSuffix
 } from './layout'
@@ -10,7 +11,7 @@ import { useToBid } from 'helpers/routes'
 import ClaimButton from './ClaimButton'
 import BetButton from './BetButton'
 
-const BidPreview = ({ bidId, type }: { bidId: string, type: string }) => {
+const BidPreview = ({ bidId, isClaimed, filterActiveBids }: { bidId: string, isClaimed: boolean, filterActiveBids?: any }) => {
   const [bid, setBid] = useState<IBid>()
   const toBid = useToBid(bidId)
   const { near }: { near: INearProps | null } = useContext(NearContext)
@@ -18,11 +19,14 @@ const BidPreview = ({ bidId, type }: { bidId: string, type: string }) => {
   const getBid = async () => {
     const b = await near?.contract.get_bid({ bid_id: bidId })
     if (b) {
-      const _bid = {
+      const _bid = mapBidInfo({
         id: bidId,
         ...b
+      })
+      if (_bid.claimedBy && !isClaimed && filterActiveBids) {
+        filterActiveBids(_bid.id)
       }
-      setBid(mapBidInfo(_bid))
+      setBid(_bid)
     }
   }
 
@@ -39,18 +43,22 @@ const BidPreview = ({ bidId, type }: { bidId: string, type: string }) => {
   )
 
 
-  if (bid.claimedBy)
+  if (bid.claimedBy) {
+    if (!isClaimed) {
+      return null
+    }
     return (
-      <>
-        { accountName }
+      <Row>
+        {accountName}
         <ClaimButton bid={bid} />
-      </>
-    );
+      </Row>
+    )
+  }
   return (
-    <>
+    <Row>
       { accountName }
       <BetButton bid={bid} />
-    </>
+    </Row>
   );
 }
 

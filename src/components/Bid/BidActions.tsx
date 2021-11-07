@@ -1,22 +1,22 @@
 import {
   BalanceMoneyIcon,
   BalanceInvertIcon,
-  BidButton,
-  ClaimButton,
+  Button,
+  ColoredButton,
   WillButton,
   WillPrefix
 } from './layout'
-import { Link } from 'react-router-dom'
 import { INearProps } from 'helpers/near'
 import { IBid } from 'helpers/mappers'
-import WillBeClaimed from './WillBeClaimed'
+import { useToAcquire } from 'helpers/routes'
+import Moment from 'react-moment'
 
-const BetBtn = ({ bidInfo, near }: { bidInfo: IBid, near: INearProps }) => {
+const BetBtn = ({ bidInfo, near, nowTime }: { bidInfo: IBid, near: INearProps, nowTime: number }) => {
   const { betPrice, claimedTime } = bidInfo
-  const forfeit = bidInfo.forfeit ? (Math.floor(Date.now() - claimedTime) / 1000 / near.config.claimPeriod) * (bidInfo.betPrice / 40) + bidInfo.betPrice / 40 : 0
+  const forfeit = bidInfo.forfeit ? (Math.floor(nowTime - claimedTime) / 1000 / near.config.claimPeriod) * (bidInfo.betPrice / 40) + bidInfo.betPrice / 40 : 0
   const totalBetPrice = betPrice + forfeit
   async function betBid () {
-    if (forfeit < 0.001) {
+    if (bidInfo.forfeit < 0.001) {
       await near.contract.bet({ bid_id: bidInfo.id }, '200000000000000', String(Math.floor((totalBetPrice + 1e-5) * 1e9)) + '000000000000000')
     } else {
       await near.contract.bet({ bid_id: bidInfo.id }, '200000000000000', String(Math.floor((totalBetPrice + 1e-5) * 1.001 * 1e9)) + '000000000000000')
@@ -24,13 +24,13 @@ const BetBtn = ({ bidInfo, near }: { bidInfo: IBid, near: INearProps }) => {
   }
 
   return (
-    <BidButton big onClick={betBid}>Bid <BalanceMoneyIcon /> {totalBetPrice.toFixed(5)}</BidButton>
+    <Button big onClick={betBid} disabled={!near.signedAccountId}>Bid <BalanceMoneyIcon /> {totalBetPrice.toFixed(5)}</Button>
   )
 }
 
 
 
-const ClaimBtn = ({ bidInfo, near }: { bidInfo: IBid, near: INearProps }) => {
+const ClaimBtn = ({ bidInfo, near, nowTime }: { bidInfo: IBid, near: INearProps, nowTime: number }) => {
   const { claimedBy, claimPrice, claimedTime } = bidInfo
   async function claimBid() {
     await near.contract.claim({ bid_id: bidInfo.id }, '200000000000000', String(Math.floor((claimPrice + 1e-5) * 1e9)) + '000000000000000')
@@ -38,33 +38,34 @@ const ClaimBtn = ({ bidInfo, near }: { bidInfo: IBid, near: INearProps }) => {
 
   return (
     !claimedBy ? (
-      <ClaimButton onClick={claimBid}>Claim for <BalanceInvertIcon /> {claimPrice.toFixed(5)}</ClaimButton>
+      <ColoredButton onClick={claimBid} disabled={!near.signedAccountId}>Claim for <BalanceInvertIcon /> {claimPrice.toFixed(5)}</ColoredButton>
     ) : (
       <WillButton big>
         <WillPrefix>Will be claimed after</WillPrefix>
-        <WillBeClaimed claimedTime={claimedTime} claimPeriod={near.config.claimPeriod} />
+        <Moment date={claimedTime} format='hh:mm:ss' add={{ seconds: near.config.claimPeriod }} duration={nowTime} />
       </WillButton>
     )
   )
 }
 
 const FinalizeBtn = ({ bidInfo, near }: { bidInfo: IBid, near: INearProps }) => {
-  async function finalizeBid () {
-    await near.contract.finalize({ bid_id: bidInfo.id }, '200000000000000', '0')
+  const toAcquire = useToAcquire(bidInfo.id)
+
+  async function finalizeBid() {
+    near.contract.finalize({ bid_id: bidInfo.id }, '200000000000000', '0')
+    toAcquire()
   }
 
   return (
-    <Link to={`/acquire/${bidInfo.id}`} className='btn btn-warning w-100' onClick={finalizeBid}>
-      Finalize
-    </Link>
+    <ColoredButton onClick={finalizeBid} disabled={bidInfo.claimedBy !== near.signedAccountId}>Finalize</ColoredButton>
   )
 }
 
 const AcquireBtn = ({ bidInfo }: { bidInfo: IBid }) => {
+  const toAcquire = useToAcquire(bidInfo.id)
+
   return (
-    <Link to={`/acquire/${bidInfo.id}`} className='btn btn-warning w-100'>
-      Acquire
-    </Link>
+    <ColoredButton onClick={toAcquire}>Acquire</ColoredButton>
   )
 }
 

@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react'
 import {
-  Row,
   Table,
   Button
 } from './layout'
 import BidPreview from './BidPreview'
 
-export const MarketTable = ({ contractMethod, limit, type }: { contractMethod: any, limit: number, type: string }) => {
+export const MarketTable = ({ contractMethod, limit, isClaimed, filterActiveBids }: { contractMethod: any, limit: number, isClaimed: boolean, filterActiveBids?: any }) => {
   const [feed, setFeed] = useState<any[]>([])
   const [hasMore, setHasMore] = useState(false)
 
@@ -33,9 +32,7 @@ export const MarketTable = ({ contractMethod, limit, type }: { contractMethod: a
 
   const bids = feed && feed.map(([bidPrice, bidId]) => {
     return (
-      <Row key={bidId}>
-        <BidPreview bidId={bidId} type={type} />
-      </Row>
+      <BidPreview bidId={bidId} key={bidId} isClaimed={isClaimed} filterActiveBids={filterActiveBids} />
     )
   })
 

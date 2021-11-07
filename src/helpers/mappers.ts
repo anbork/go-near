@@ -40,7 +40,7 @@ export interface IBid {
 
 
 export const mapBidInfo = (b: any): IBid => {
-  return b ? {
+  return b && b.bet_price ? {
     id: b.id,
     isAtMarket: true,
     numClaims: b.num_claims,
@@ -52,7 +52,7 @@ export const mapBidInfo = (b: any): IBid => {
     forfeit: fromNear(b.forfeit),
     isOnAcquisition: b.on_acquisition
   } : {
-    id: '',
+    id: b.id || '',
     isAtMarket: false,
     numClaims: 0,
     claimedBy: null,

@@ -12,17 +12,14 @@ interface INearConfig {
   claimPeriod: number
 }
 
-export interface IUserProps {
-  signedIn: boolean;
-  signedAccountId: string | null;
-}
-
 export interface INearProps {
   connected: boolean;
   wallet: nearAPI.WalletConnection;
   config: INearConfig;
   api: nearAPI.Near;
   contract: any;
+  signedIn: boolean;
+  signedAccountId: string | null;
 }
 
 export const NearContext = createContext<any>(null);
@@ -59,7 +56,9 @@ export const connectNear = async (): Promise<INearProps> => {
     wallet: walletConnection,
     config: nearConfig,
     api: near,
-    contract
+    contract,
+    signedIn: false,
+    signedAccountId: null
   }
 }
 

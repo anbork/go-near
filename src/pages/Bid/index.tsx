@@ -7,27 +7,29 @@ import BidComponent from 'components/Bid'
 import {useTopScroll} from 'helpers/hooks'
 import { useParams } from 'react-router-dom'
 import { useToMarket } from 'helpers/routes'
-import { mapBidInfo, IBid, IBidSafety } from 'helpers/mappers'
+import { mapBidInfo, mapProfile, IBidSafety, IProfile } from 'helpers/mappers'
 import { NearContext, INearProps, fromNear } from 'helpers/near'
 import { Contract } from 'near-api-js'
+import useSWR from 'swr'
 
 export const Bid = () => {
   useTopScroll()
   const { bidId } = useParams<{ bidId: string }>();
   const { near }: { near: INearProps | null } = useContext(NearContext)
-  const [bidInfo, setBidInfo] = useState<IBid>()
   const [bidSafety, setBidSafety] = useState<IBidSafety>()
+  const [profile, setProfile] = useState<IProfile | null>(null)
   const toMarket = useToMarket()
 
-  const getBidInfo = async () => {
+  const fetchBid = async () => {
     if (!near) return
-    const b = mapBidInfo(await near.contract.get_bid({
+    const _bid = await near.contract.get_bid({
       bid_id: bidId
-    }))
-    b.id = bidId
-    setBidInfo(b);
+    })
+    return mapBidInfo({ ..._bid, id: bidId })
   }
 
+  const { data: bidInfo } = useSWR(['get_bid', near, bidId], fetchBid, { refreshInterval: 60000 })
+  
   const getBidSafety = async () => {
     if (!near) {
       return
@@ -51,16 +53,33 @@ export const Bid = () => {
     return
   }
 
+  const getProfile = async () => {
+    if (!near) return
+    if (near.signedAccountId) {
+      const b = mapProfile(await near.contract.get_profile({
+        profile_id: near.signedAccountId
+      }))
+      setProfile(b);
+    } else {
+      setProfile(null);
+    }
+  }
+
   useEffect(() => {
-    getBidInfo()
     getBidSafety()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [near])
 
+
+  useEffect(() => {
+    getProfile()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [near?.signedAccountId])
+
   return (
     <Container>
       <BackButton onClick={toMarket} />
-      { near && bidInfo && bidSafety && <BidComponent bidInfo={bidInfo} bidSafety={bidSafety} near={near} /> }
+      { near && bidInfo && bidSafety && <BidComponent bidInfo={bidInfo} bidSafety={bidSafety} near={near} profile={profile} /> }
     </Container>
   )
 }

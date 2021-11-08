@@ -25,10 +25,10 @@ export const Bid = () => {
     const _bid = await near.contract.get_bid({
       bid_id: bidId
     })
-    return mapBidInfo({ ..._bid, id: bidId })
+    return mapBidInfo(_bid ? { ..._bid, id: bidId } : null)
   }
 
-  const { data: bidInfo } = useSWR(['get_bid', near, bidId], fetchBid, { refreshInterval: 60000 })
+  const { data: bidInfo } = useSWR(['get_bid', near?.connected, bidId], fetchBid, { refreshInterval: 60000 })
   
   const getBidSafety = async () => {
     if (!near) {

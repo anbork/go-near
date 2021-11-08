@@ -1,5 +1,8 @@
 import { createContext } from 'react';
 import * as nearAPI from 'near-api-js'
+const nearSeedPhrase = require('near-seed-phrase')
+
+export const { generateSeedPhrase, parseSeedPhrase } = nearSeedPhrase
 
 interface INearConfig {
   accountSuffix: string,

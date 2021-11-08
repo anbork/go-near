@@ -19,10 +19,7 @@ const BidPreview = ({ bidId, isClaimed, filterActiveBids }: { bidId: string, isC
   const getBid = async () => {
     const b = await near?.contract.get_bid({ bid_id: bidId })
     if (b) {
-      const _bid = mapBidInfo({
-        id: bidId,
-        ...b
-      })
+      const _bid = mapBidInfo({id: bidId, ...b })
       if (_bid.claimedBy && !isClaimed && filterActiveBids) {
         filterActiveBids(_bid.id)
       }

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   BalanceMoneyIcon,
   BalanceInvertIcon,
@@ -9,13 +10,14 @@ import {
 import { INearProps } from 'helpers/near'
 import { IBid } from 'helpers/mappers'
 import { useToAcquire } from 'helpers/routes'
+import { BeatLoader } from "react-spinners";
 import Moment from 'react-moment'
 
 const BetBtn = ({ bidInfo, near, nowTime }: { bidInfo: IBid, near: INearProps, nowTime: number }) => {
   const { betPrice, claimedTime } = bidInfo
   const forfeit = bidInfo.forfeit ? (Math.floor(nowTime - claimedTime) / 1000 / near.config.claimPeriod) * (bidInfo.betPrice / 40) + bidInfo.betPrice / 40 : 0
   const totalBetPrice = betPrice + forfeit
-  async function betBid () {
+  const betBid = async () => {
     if (bidInfo.forfeit < 0.001) {
       await near.contract.bet({ bid_id: bidInfo.id }, '200000000000000', String(Math.floor((totalBetPrice + 1e-5) * 1e9)) + '000000000000000')
     } else {
@@ -32,7 +34,7 @@ const BetBtn = ({ bidInfo, near, nowTime }: { bidInfo: IBid, near: INearProps, n
 
 const ClaimBtn = ({ bidInfo, near, nowTime }: { bidInfo: IBid, near: INearProps, nowTime: number }) => {
   const { claimedBy, claimPrice, claimedTime } = bidInfo
-  async function claimBid() {
+  const claimBid = async () => {
     await near.contract.claim({ bid_id: bidInfo.id }, '200000000000000', String(Math.floor((claimPrice + 1e-5) * 1e9)) + '000000000000000')
   }
 
@@ -49,12 +51,18 @@ const ClaimBtn = ({ bidInfo, near, nowTime }: { bidInfo: IBid, near: INearProps,
 }
 
 const FinalizeBtn = ({ bidInfo, near }: { bidInfo: IBid, near: INearProps }) => {
+  const [loading, setLoading] = useState<boolean>(false)
   const toAcquire = useToAcquire(bidInfo.id)
 
-  async function finalizeBid() {
-    near.contract.finalize({ bid_id: bidInfo.id }, '200000000000000', '0')
+  const finalizeBid = async () => {
+    setLoading(true)
+    await near.contract.finalize({ bid_id: bidInfo.id }, '200000000000000', '0')
     toAcquire()
   }
+
+  if (loading) return (
+    <ColoredButton><BeatLoader /></ColoredButton>
+  )
 
   return (
     <ColoredButton onClick={finalizeBid} disabled={bidInfo.claimedBy !== near.signedAccountId}>Finalize</ColoredButton>

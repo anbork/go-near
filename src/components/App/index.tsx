@@ -1,7 +1,7 @@
 import {HashRouter as Router, Switch, Route} from 'react-router-dom'
 import {Normalize} from 'styled-normalize'
 
-import {Market, Offer, Bid, Profile, Rules} from 'pages'
+import { Market, Offer, Bid, Profile, Rules, Acquire} from 'pages'
 import {Layout} from 'components/Layout'
 import {GlobalStyle} from './layout'
 
@@ -15,6 +15,7 @@ export const App = () => {
             <Switch>
               <Route exact path="/" component={Market} />
               <Route path="/market" component={Market} />
+              <Route path="/acquire/:bidId" component={Acquire} />
               <Route path="/offer" component={Offer} />
               <Route path="/bid/:bidId" component={Bid} />
               <Route path="/profile" component={Profile} />

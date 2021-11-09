@@ -17,7 +17,6 @@ import {
 import { useTopScroll } from 'helpers/hooks'
 import { useParams } from 'react-router-dom'
 import useSWRImmutable from 'swr/immutable'
-import { mapProfile } from 'helpers/mappers'
 import { BeatLoader } from "react-spinners";
 import { NearContext, INearProps, generateSeedPhrase, parseSeedPhrase } from 'helpers/near'
 
@@ -36,28 +35,22 @@ export const Acquire = () => {
     if (!near) return
     setLoadingSeedPhrase(true)
     const publicKey = parseSeedPhrase(seedPhrase, '').publicKey
-    await near.contract.acquire({ bid_id: bidId, new_public_key: publicKey }, '200000000000000', '0')
+    await near.api.acquire(bidId, publicKey)
     setAcquireSuccess(true)
   }
 
 
   const acquireBidPublicKey = async () => {
-    if (!near) return
+    if (!near || !userPublicKey) return
     setLoadingSeedPhrase(true)
-    await near.contract.acquire({ bid_id: bidId, new_public_key: userPublicKey }, '200000000000000', '0')
+    await near.api.acquire(bidId, userPublicKey)
     setAcquireSuccess(true)
   }
 
-  const fetchProfile = async () => {
-    if (!near) return
-    if (near.signedAccountId) {
-      return mapProfile(await near.contract.get_profile({
-        profile_id: near.signedAccountId
-      }))
-    }
-  }
-
-  const { data: profile } = useSWRImmutable(['get_profile', near?.signedAccountId, bidId], fetchProfile)
+  const { data: profile } = useSWRImmutable(
+    ['get_profile', near?.signedAccountId, bidId], 
+    () => near?.api.get_profile(near.signedAccountId)
+  )
   const isMineAcquisition = profile?.acquisitions.some(id => bidId === id)
   const recoverLink = near ? near.config.walletUrl + '/recover-seed-phrase' : '#'
 

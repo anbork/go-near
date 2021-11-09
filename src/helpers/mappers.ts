@@ -1,4 +1,4 @@
-import { fromNear } from 'helpers/near'
+import { fromNear } from 'helpers/api'
 
 export interface IStat {
   numProfiles: number;

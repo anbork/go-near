@@ -13,14 +13,14 @@ const Authorize: FC = () => {
 
   if (!near) return null;
 
-  const { wallet, config, signedIn, signedAccountId } = near
+  const { api, signedIn, signedAccountId } = near
   
   const handleSignIn = async () => {
-    wallet.requestSignIn(config.contractName)
+    api.signIn()
   }
 
   const handleSignOut = async () => {
-    wallet.signOut()
+    api.signOut()
     setNear({
       ...near,
       signedIn: false, 

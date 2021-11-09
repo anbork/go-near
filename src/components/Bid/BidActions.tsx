@@ -19,9 +19,9 @@ const BetBtn = ({ bidInfo, near, nowTime }: { bidInfo: IBid, near: INearProps, n
   const totalBetPrice = betPrice + forfeit
   const betBid = async () => {
     if (bidInfo.forfeit < 0.001) {
-      await near.contract.bet({ bid_id: bidInfo.id }, '200000000000000', String(Math.floor((totalBetPrice + 1e-5) * 1e9)) + '000000000000000')
+      await near.api.bet(bidInfo.id, Math.floor((totalBetPrice + 1e-5) * 1e9))
     } else {
-      await near.contract.bet({ bid_id: bidInfo.id }, '200000000000000', String(Math.floor((totalBetPrice + 1e-5) * 1.001 * 1e9)) + '000000000000000')
+      await near.api.bet(bidInfo.id, Math.floor((totalBetPrice + 1e-5) * 1.001 * 1e9))
     }
   }
 
@@ -35,7 +35,7 @@ const BetBtn = ({ bidInfo, near, nowTime }: { bidInfo: IBid, near: INearProps, n
 const ClaimBtn = ({ bidInfo, near, nowTime }: { bidInfo: IBid, near: INearProps, nowTime: number }) => {
   const { claimedBy, claimPrice, claimedTime } = bidInfo
   const claimBid = async () => {
-    await near.contract.claim({ bid_id: bidInfo.id }, '200000000000000', String(Math.floor((claimPrice + 1e-5) * 1e9)) + '000000000000000')
+    await near.api.claim(bidInfo.id, Math.floor((claimPrice + 1e-5) * 1e9))
   }
 
   return (
@@ -56,7 +56,7 @@ const FinalizeBtn = ({ bidInfo, near }: { bidInfo: IBid, near: INearProps }) => 
 
   const finalizeBid = async () => {
     setLoading(true)
-    await near.contract.finalize({ bid_id: bidInfo.id }, '200000000000000', '0')
+    await near.api.finalize(bidInfo.id)
     toAcquire()
   }
 

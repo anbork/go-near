@@ -9,7 +9,7 @@ const NearApp: FC = () => {
   useEffect(() => {
     async function connect() {
       const near: INearProps = await connectNear()
-      const accountId = await near.wallet.getAccountId()
+      const accountId = await near.api.get_account_id()
       setNear({
         ...near,
         signedIn: !!accountId,

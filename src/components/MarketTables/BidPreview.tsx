@@ -6,7 +6,7 @@ import {
   ClientSuffix
 } from './layout'
 import { NearContext, INearProps } from 'helpers/near'
-import { mapBidInfo, IBid } from 'helpers/mappers'
+import { IBid } from 'helpers/mappers'
 import { useToBid } from 'helpers/routes'
 import ClaimButton from './ClaimButton'
 import BetButton from './BetButton'
@@ -17,9 +17,8 @@ const BidPreview = ({ bidId, isClaimed, filterActiveBids }: { bidId: string, isC
   const { near }: { near: INearProps | null } = useContext(NearContext)
 
   const getBid = async () => {
-    const b = await near?.contract.get_bid({ bid_id: bidId })
-    if (b) {
-      const _bid = mapBidInfo({id: bidId, ...b })
+    const _bid = await near?.api.get_bid(bidId)
+    if (_bid) {
       if (_bid.claimedBy && !isClaimed && filterActiveBids) {
         filterActiveBids(_bid.id)
       }

@@ -7,9 +7,8 @@ import BidComponent from 'components/Bid'
 import {useTopScroll} from 'helpers/hooks'
 import { useParams } from 'react-router-dom'
 import { useToMarket } from 'helpers/routes'
-import { mapBidInfo, mapProfile, IBidSafety, IProfile } from 'helpers/mappers'
-import { NearContext, INearProps, fromNear } from 'helpers/near'
-import { Contract } from 'near-api-js'
+import { IBidSafety, IProfile } from 'helpers/mappers'
+import { NearContext, INearProps } from 'helpers/near'
 import useSWR from 'swr'
 
 export const Bid = () => {
@@ -20,59 +19,27 @@ export const Bid = () => {
   const [profile, setProfile] = useState<IProfile | null>(null)
   const toMarket = useToMarket()
 
-  const fetchBid = async () => {
-    if (!near) return
-    const _bid = await near.contract.get_bid({
-      bid_id: bidId
-    })
-    return mapBidInfo(_bid ? { ..._bid, id: bidId } : null)
-  }
-
-  const { data: bidInfo } = useSWR(['get_bid', near?.connected, bidId], fetchBid, { refreshInterval: 60000 })
+  const { data: bidInfo } = useSWR(
+    ['get_bid', near?.connected, bidId], 
+    () => near?.api.get_bid(bidId),
+    { refreshInterval: 60000 }
+  )
   
   const getBidSafety = async () => {
-    if (!near) {
-      return
-    }
-    const account = await near.api.account(bidId)
-    try {
-      const codeHash = (await account.state()).code_hash
-      const accessKeysLen = (await account.getAccessKeys()).length
-      const lockerContract: any = await new Contract(account, bidId, {
-        viewMethods: ['get_owner'],
-        changeMethods: []
-      })
-      const lockerOwner = await lockerContract.get_owner({})
-      const balance = (await account.getAccountBalance()).total
-      setBidSafety({ codeHash, accessKeysLen, lockerOwner, balance: fromNear(balance) })
-      return
-    } catch (e) {
-      console.log('check safety error', e)
-    }
-    setBidSafety({ codeHash: '(unknown)', accessKeysLen: '(unknown)', lockerOwner: '(not found)', balance: 0 })
-    return
+    if (!near) return
+    const bs = await near.api.get_bid_safety(bidId)
+    if (bs) setBidSafety(bs)
   }
 
   const getProfile = async () => {
     if (!near) return
-    if (near.signedAccountId) {
-      const b = mapProfile(await near.contract.get_profile({
-        profile_id: near.signedAccountId
-      }))
-      setProfile(b);
-    } else {
-      setProfile(null);
-    }
+    const pr = await near.api.get_profile(near.signedAccountId)
+    if (pr) setProfile(pr);
   }
 
   useEffect(() => {
-    getBidSafety()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [near])
-
-
-  useEffect(() => {
     getProfile()
+    getBidSafety()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [near?.signedAccountId])
 

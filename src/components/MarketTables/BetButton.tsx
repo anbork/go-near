@@ -8,7 +8,6 @@ import {
 import { useToBid } from 'helpers/routes'
 import { IBid } from 'helpers/mappers'
 import { NearContext, INearProps } from 'helpers/near'
-import { fromNear } from 'helpers/near'
 import Profitable from '../Bid/Profitable'
 
 const BetButton = ({ bid }: { bid: IBid }) => {
@@ -19,9 +18,8 @@ const BetButton = ({ bid }: { bid: IBid }) => {
 
   const getBalance = async () => {
     if (!near || !bid) return
-    const account = await near.api.account(bid.id)
-    const b = await account.getAccountBalance()
-    setBalance(fromNear(b.total))
+    const b = await near.api.get_balance(bid.id)
+    setBalance(b)
   }
 
   useEffect(() => {

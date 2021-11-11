@@ -53,3 +53,52 @@ export const Value = styled.div`
   height: 22px;
   width: 40px;
 `
+
+export const CompetitorsBlock = styled.div`
+  grid-column: 3;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  width: 440px;
+  margin-top: 35px;
+
+  @media (max-width: ${break_down}) {
+    width: auto;
+    margin-top: 20px;
+  }
+`
+
+export const CompetitorsTitle = styled.div`
+  height: 42px;
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 42px;
+
+  @media (max-width: ${break_down}) {
+    height: 24px;
+    line-height: 24px;
+    font-size: 16px;
+  }
+`
+
+export const CompetitorsFounded = styled.div`
+  margin-top: 2px;
+  font-weight: normal;
+  font-size: 15px;
+  line-height: 22px;
+  height: 22px;
+  color: #8C95A6;
+
+  @media (max-width: ${break_down}) {
+    margin-top: 7px;
+    font-size: 14px;
+    height: 21px;
+    line-height: 21px;
+  }
+`
+
+export const FoundedName = styled.span`
+  color: #FF9494;
+  cursor: pointer;
+`

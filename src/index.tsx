@@ -1,21 +1,17 @@
 import {StrictMode, FC, useEffect, useState} from 'react'
 import {render} from 'react-dom'
 import {App} from 'components/App'
-import { NearContext, connectNear, INearProps, IUserProps } from 'helpers/near'
+import { NearContext, connectNear, INearProps } from 'helpers/near'
 
 const NearApp: FC = () => {
   let [near, setNear] = useState<INearProps | null>(null);
-  let [user, setUser] = useState<IUserProps>({
-    signedIn: false,
-    signedAccountId: null
-  });
 
   useEffect(() => {
     async function connect() {
       const near: INearProps = await connectNear()
-      setNear(near);
-      const accountId = await near.wallet.getAccountId()
-      setUser({
+      const accountId = await near.api.get_account_id()
+      setNear({
+        ...near,
         signedIn: !!accountId,
         signedAccountId: accountId,
       })
@@ -26,7 +22,7 @@ const NearApp: FC = () => {
 
   return (
     <StrictMode>
-      <NearContext.Provider value={{ near, user, setUser }}>
+      <NearContext.Provider value={{ near, setNear }}>
         <App />
       </NearContext.Provider>
     </StrictMode>

@@ -1,35 +1,27 @@
 import { useState, useEffect } from 'react'
+import { INearProps } from 'helpers/near'
 import {
-  Bids,
-  Client,
-  ClientSuffix,
-  Claimed,
-  ClaimedPrefix,
-  DetailsButton,
-  OkIcon,
-  Row,
   Table,
-  MoneyIcon,
-  StartsButton,
   Button
 } from './layout'
-import { useToProfile, useToProduct } from 'helpers/routes'
-import { fromNear } from 'helpers/near'
+import BidPreview from './BidPreview'
 
-export const MarketTable = ({ contractMethod, limit, type }: { contractMethod: any, limit: number, type: string }) => {
-  const toProfile = useToProfile()
-  const toProductTwo = useToProduct('two')
+export const MarketTable = ({ near, limit, isClaimed, filterActiveBids }: { near: INearProps, limit: number, isClaimed: boolean,    filterActiveBids?: (bidId: string) => void }) => {
+
   const [feed, setFeed] = useState<any[]>([])
   const [hasMore, setHasMore] = useState(false)
 
   async function getBets() {
     const lastKey = feed && feed.length > 0 ? feed[feed.length - 1] : null
-    const bets = await contractMethod({
-      from_key: lastKey,
-      limit: limit
-    })
+    console.log(lastKey, limit)
+    const bets = isClaimed ? 
+      await near.api.get_top_claims(lastKey, limit) : 
+      await near.api.get_top_bets(lastKey, limit)
+      
     if (bets.length === limit) {
       setHasMore(true)
+    } else {
+      setHasMore(false)
     }
     setFeed(feed => [...feed, ...bets]);
   }
@@ -42,25 +34,8 @@ export const MarketTable = ({ contractMethod, limit, type }: { contractMethod: a
 
 
   const bids = feed && feed.map(([bidPrice, bidId]) => {
-    const [prefix, postfix] = bidId.split('.')
-    bidPrice = fromNear(bidPrice).toFixed(2)
-
-    if (type === "claims")
-      return (
-        <Row key={bidId}>
-          <Client onClick={toProfile}>{prefix}<ClientSuffix>.{postfix}</ClientSuffix></Client>
-          <OkIcon />
-          <ClaimedPrefix>Claimed by</ClaimedPrefix>
-          <Claimed onClick={toProfile}>dna.near</Claimed>
-          <DetailsButton onClick={toProductTwo}>View Details</DetailsButton>
-        </Row>
-      )
     return (
-      <Row key={bidId}>
-        <Client onClick={toProfile}>{prefix}<ClientSuffix>.{postfix}</ClientSuffix></Client>
-        <Bids></Bids>
-        <StartsButton>Starts from <MoneyIcon /> {bidPrice}</StartsButton>
-      </Row>
+      <BidPreview bidId={bidId} key={bidId} isClaimed={isClaimed} filterActiveBids={filterActiveBids} />
     )
   })
 

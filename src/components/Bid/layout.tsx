@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import back_png from 'assets/images/back.png'
 import arrow_png from 'assets/images/arrow.png'
@@ -14,21 +14,7 @@ import {
   BorderButton,
   GreyButton
 } from 'components/Core'
-import {CompetitorsTable} from 'components/CompetitorsTable'
-import {break_down} from 'helpers/media'
-
-export const Container = styled.div`
-  margin: 0 var(--margin) 150px;
-  display: grid;
-  grid-template-columns: 120px 1fr 440px; 
-
-  @media (max-width: ${break_down}) {
-    margin: 0 var(--margin__mob) 30px;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-  }
-`
+import { break_down } from 'helpers/media'
 
 export const BackButton = styled.div`
   width: 48px;
@@ -71,7 +57,7 @@ export const Title = styled.div`
   height: 130px;
   line-height: 130px;
   font-weight: bold;
-  font-size: 88px;
+  font-size: 78px;
 
   @media (max-width: ${break_down}) {
     height: 40px;
@@ -95,6 +81,17 @@ export const BalanceTitle = styled.div`
   line-height: 24px;
   font-weight: normal;
   font-size: 19px;
+
+  @media (max-width: ${break_down}) {
+    font-size: 15px;
+  }
+`
+
+export const ProfitableText = styled.div`
+  margin-top:5px;
+  line-height: 24px;
+  font-weight: 300;
+  font-size: 16px;
 
   @media (max-width: ${break_down}) {
     font-size: 15px;
@@ -134,8 +131,8 @@ export const BalanceDetails = styled.div`
   }
 `
 
-export const BalanceButtons = styled.div<{type?: string} | any>`
-  ${({type}) => type === 'one' ? 'margin-top: 46px;' : 'margin-top: 22px;'}
+export const BidButtons = styled.div<{ type?: string } | any>`
+  ${({ type }) => type === 'one' ? 'margin-top: 46px;' : 'margin-top: 22px;'}
   width: auto;
   display: flex;
   border-bottom: 1px solid #3F4450;
@@ -144,13 +141,14 @@ export const BalanceButtons = styled.div<{type?: string} | any>`
     width: 100%;
     flex-direction: column;
     align-items: stretch;
-    ${({type}) => type === 'one' ? 'margin-top: 37px;' : 'margin-top: 16px;'}
+    ${({ type }) => type === 'one' ? 'margin-top: 37px;' : 'margin-top: 16px;'}
   }
 `
 
-export const ClaimButton = styled(RainbowButton)`
+export const ColoredButton = styled<{ disabled?: boolean } | any>(RainbowButton)`
   width: 246px;
   margin-bottom: 37px;
+  ${({ disabled }) => disabled ? 'opacity: 0.4; pointer-events: none;' : ''}
 
   @media (max-width: ${break_down}) {
     width: auto;
@@ -163,6 +161,7 @@ export const ClaimButton = styled(RainbowButton)`
 export const WillButton = styled(GreyButton)`
   width: 298px;
   margin-bottom: 37px;
+  cursor: default;
 
   @media (max-width: ${break_down}) {
     width: auto;
@@ -179,10 +178,11 @@ export const WillTime = styled.span`
   font-weight: bold;
 `
 
-export const BidButton = styled(BorderButton)`
+export const Button = styled<{ disabled?: boolean } | any>(BorderButton)`
   width: 190px;
   margin-left: 18px;
   margin-bottom: 37px;
+  ${({ disabled }) => disabled ? 'opacity: 0.4; pointer-events: none;' : ''}
 
   @media (max-width: ${break_down}) {
     margin-left: 0;
@@ -198,7 +198,7 @@ export const BidButton = styled(BorderButton)`
 export const Question = styled.div`
   margin-top: 20px;
   height: 28px;
-  line-hieght: 28px;
+  line-height: 28px;
   font-weight: 600;
   font-size: 16px;
   color: #8C95A6;
@@ -250,57 +250,6 @@ export const Rules = styled(Link)`
     margin-bottom: 35px;
   }
 `
-
-export const Competitors = styled.div`
-  grid-column: 3;
-  grid-row: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  width: 440px;
-  margin-top: 35px;
-
-  @media (max-width: ${break_down}) {
-    width: auto;
-    margin-top: 20px;
-  }
-`
-
-export const CompetitorsTitle = styled.div`
-  height: 42px;
-  font-weight: 600;
-  font-size: 28px;
-  line-height: 42px;
-
-  @media (max-width: ${break_down}) {
-    height: 24px;
-    line-height: 24px;
-    font-size: 16px;
-  }
-`
-
-export const CompetitorsFounded = styled.div`
-  margin-top: 2px;
-  font-weight: normal;
-  font-size: 15px;
-  line-height: 22px;
-  height: 22px;
-  color: #8C95A6;
-
-  @media (max-width: ${break_down}) {
-    margin-top: 7px;
-    font-size: 14px;
-    height: 21px;
-    line-height: 21px;
-  }
-`
-
-export const FoundedName = styled.span`
-  color: #FF9494;
-  cursor: pointer;
-`
-
-export const Table = styled(CompetitorsTable)``
 
 export const Claimed = styled.div`
   margin-top: 40px;
@@ -392,4 +341,11 @@ export const ClaimedDateTime = styled.div`
     grid-row: 2;
     grid-column: 2 / 4;
   }
+`
+
+export const NotSafeText = styled.div`
+  margin-top: 25px;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 26px;
 `

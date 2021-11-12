@@ -19,9 +19,9 @@ const BetBtn = ({ bidInfo, near, nowTime }: { bidInfo: IBid, near: INearProps, n
   const totalBetPrice = betPrice + forfeit
   const betBid = async () => {
     if (bidInfo.forfeit < 0.001) {
-      await near.api.bet(bidInfo.id, Math.floor((totalBetPrice + 1e-5) * 1e9))
+      await near.api.bet(bidInfo.id, totalBetPrice + 1e-5)
     } else {
-      await near.api.bet(bidInfo.id, Math.floor((totalBetPrice + 1e-5) * 1.001 * 1e9))
+      await near.api.bet(bidInfo.id, (totalBetPrice + 1e-5) * 1.001)
     }
   }
 
@@ -35,7 +35,7 @@ const BetBtn = ({ bidInfo, near, nowTime }: { bidInfo: IBid, near: INearProps, n
 const ClaimBtn = ({ bidInfo, near, nowTime }: { bidInfo: IBid, near: INearProps, nowTime: number }) => {
   const { claimedBy, claimPrice, claimedTime } = bidInfo
   const claimBid = async () => {
-    await near.api.claim(bidInfo.id, Math.floor((claimPrice + 1e-5) * 1e9))
+    await near.api.claim(bidInfo.id, claimPrice + 1e-5)
   }
 
   return (

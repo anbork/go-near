@@ -1,8 +1,9 @@
-import { Near, Account, WalletConnection, Contract } from 'near-api-js'
+import { Near, Account, WalletConnection, Contract, utils } from 'near-api-js'
 import { mapBidInfo, mapProfile, mapStats, IBid, IProfile, IBidSafety, IStat } from 'helpers/mappers'
 import { config } from './config'
 
-export const fromNear = (s: string) => (parseFloat(s) / 1e24 || 0) as number
+export const fromNear = (amount: string): number => parseFloat(utils.format.formatNearAmount(amount || '0'))
+export const toYoctoNear = (amount: number): string => utils.format.parseNearAmount(String(amount)) || '0'
 
 export interface NearContract extends Contract {
   bet?(params: { bid_id: string }, gas: string, amount: string): void
@@ -15,7 +16,8 @@ export interface NearContract extends Contract {
   get_top_bets?(params: { from_key: string | null, limit: number }): [string, string][]
   get_top_claims?(params: { from_key: string | null, limit: number }): [string, string][]
 }
-class Api {
+
+class NearApi {
   readonly near: Near;
   readonly contract: NearContract;
   readonly walletConnection: WalletConnection;
@@ -59,11 +61,11 @@ class Api {
   }
 
   async bet(bid_id: string, amount: number): Promise<void> {
-    await this.contract.bet?.({ bid_id }, '200000000000000', String(amount) + '000000000000000')
+    await this.contract.bet?.({ bid_id }, '200000000000000', toYoctoNear(amount))
   }
 
   async claim(bid_id: string, amount: number): Promise<void> {
-    await this.contract.claim?.({ bid_id }, '200000000000000', String(amount) + '000000000000000')
+    await this.contract.claim?.({ bid_id }, '200000000000000', toYoctoNear(amount))
   }
 
   async finalize(bid_id: string): Promise<void> {
@@ -124,4 +126,4 @@ class Api {
   }
 }
 
-export default Api
+export default NearApi

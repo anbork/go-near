@@ -2,14 +2,14 @@
 import * as nearAPI from 'near-api-js'
 import { createContext } from 'react';
 import { config, INearConfig } from './config'
-import Api from './api'
+import NearApi from './api'
 const nearSeedPhrase = require('near-seed-phrase')
 
 export const { generateSeedPhrase, parseSeedPhrase } = nearSeedPhrase
 
 export interface INearProps {
   connected: boolean;
-  api: Api;
+  api: NearApi;
   config: INearConfig;
   signedIn: boolean;
   signedAccountId: string | null;
@@ -20,7 +20,7 @@ export const NearContext = createContext<any>(null);
 export const connectNear = async (): Promise<INearProps> => {
   const keyStore = new nearAPI.keyStores.BrowserLocalStorageKeyStore()
   const near = await nearAPI.connect(Object.assign({ deps: { keyStore } }, config))
-  const api = new Api(near)
+  const api = new NearApi(near)
 
   return {
     connected: true,

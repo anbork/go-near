@@ -15,7 +15,17 @@ export const Container = styled.div`
     align-items: stretch;
   }
 `
+export const FullWidthContainer = styled.div`
+  margin: 116px var(--margin) 30px;
+  text-align:center;
 
+  @media (max-width: ${break_down}) {
+    margin: 40px var(--margin__mob) 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+`
 export const Main = styled.div`
   grid-row: 1;
   grid-column: 2;
@@ -33,6 +43,18 @@ export const Title = styled.div`
   @media (max-width: ${break_down}) {
     font-size: 33px;
     line-height: 39px;
+  }
+`
+
+export const Head = styled.div`
+  font-weight: bold;
+  font-size: 50px;
+  line-height: 65px;
+  margin-bottom: 40px;
+
+  @media (max-width: ${break_down}) {
+    font-size: 25px;
+    line-height: 33px;
   }
 `
 
@@ -61,7 +83,7 @@ export const DetailsTwo = styled(DetailsOne)`
   }
 `
 
-export const Form = styled.div`
+export const Form = styled.form<any>`
   margin-top: 16px;
   grid-row: 1;
   grid-column: 4;
@@ -137,7 +159,7 @@ export const InputContainer = styled.div`
   }
 `
 
-export const Input = styled.input`
+export const Input = styled.input<any>`
   margin-left: 25px;
   height: 32px;
   line-height: 32px;
@@ -171,4 +193,12 @@ export const InputSuffix = styled.div`
     margin-right: 16px;
     font-size: 15px;
   }
+`
+
+export const Red = styled.span`
+  color: #ff7e7e;
+`
+
+export const Green = styled.span`
+  color: #90ffac;
 `

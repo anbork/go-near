@@ -74,7 +74,7 @@ export const Acquire = () => {
             <InputContainer>
               <Input defaultValue={seedPhrase} readOnly={true} />
             </InputContainer>
-            <HelperSeed>Go to <Link href={recoverLink}>wallet</Link> and restore your account</HelperSeed>
+            <HelperSeed>Go to <Link href={recoverLink} rel="noreferrer">wallet</Link> and restore your account</HelperSeed>
           </>
         }
       </Form>

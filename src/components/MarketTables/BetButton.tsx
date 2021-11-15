@@ -19,7 +19,7 @@ const BetButton = ({ bid }: { bid: IBid }) => {
   const getBalance = async () => {
     if (!near || !bid) return
     const b = await near.api.get_balance(bid.id)
-    setBalance(b)
+    if (b) setBalance(b)
   }
 
   useEffect(() => {

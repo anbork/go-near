@@ -62,7 +62,7 @@ const byBigGrey = (big?: boolean) => big ? '' : `
   font-weight: normal;
 `
 
-export const GreyButton = styled.div<{big?: boolean}>`
+export const GreyButton = styled.button<{big?: boolean}>`
   height: 67px;
   background: #2C3139;
   border-radius: 17px;

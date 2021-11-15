@@ -8,6 +8,18 @@ const NearApp: FC = () => {
 
   useEffect(() => {
     async function connect() {
+      if (window.location.hash.indexOf('offer-processing') >= 0) {
+        const currentUrl = new URL(window.location.href);
+        const accountId = currentUrl.searchParams.get('account_id')
+        if (accountId) {
+          currentUrl.searchParams.delete('public_key');
+          currentUrl.searchParams.delete('all_keys');
+          currentUrl.searchParams.delete('account_id');
+          currentUrl.searchParams.set('access', accountId)
+          window.history.replaceState({}, document.title, currentUrl.toString());
+        }
+      }
+
       const near: INearProps = await connectNear()
       const accountId = await near.api.get_account_id()
       setNear({

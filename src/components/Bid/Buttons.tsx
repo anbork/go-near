@@ -9,7 +9,6 @@ const Buttons = ({ bidInfo, near }: { bidInfo: IBid, near: INearProps }) => {
   useEffect(() => {
     if (bidInfo.claimedBy && !bidInfo.isOnAcquisition) {
       const interval = setInterval(() => {
-        console.log('interval')
         const _now = Date.now()
         setNowTime(_now);
       }, 1000);

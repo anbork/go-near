@@ -19,7 +19,7 @@ export const App = () => {
               <Route path="/offer" component={Offer} />
               <Route path="/offer-processing/:offer/:beneficiar" component={OfferProcessing} />
               <Route path="/bid/:bidId" component={Bid} />
-              <Route path="/profile" component={Profile} />
+              <Route path={["/profile/:accountId", "/profile"]} component={Profile} />
               <Route path="/rules" component={Rules} />
             </Switch>
           </Layout>

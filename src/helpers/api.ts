@@ -17,6 +17,7 @@ export interface NearContract extends Contract {
   get_top_bets?(params: { from_key: string | null, limit: number }): [string, string][]
   get_top_claims?(params: { from_key: string | null, limit: number }): [string, string][]
   offer?(params: { profile_id: string }, gas: string, amount: string): boolean
+  collect_rewards?(params: object, gas: string, amount: string): void
 }
 
 class NearApi {
@@ -120,6 +121,10 @@ class NearApi {
 
   async acquire(bid_id: string, new_public_key: string ): Promise<void> {
     await this.contract.acquire?.({ bid_id, new_public_key }, '200000000000000', '0')
+  }
+
+  async collect_rewards(): Promise<void> {
+    await this.contract.collect_rewards?.({}, '200000000000000', '0')
   }
 
   async get_profile(profile_id: string | null): Promise<IProfile> {

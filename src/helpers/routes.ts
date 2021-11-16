@@ -5,15 +5,17 @@ export interface CheckState {
   isMarket: boolean;
   isOffer: boolean;
   isRules: boolean;
+  isProfile: boolean;
 }
 
 const checkState: CheckState = {
   isMarket: false,
   isOffer: false,
-  isRules: false
+  isRules: false,
+  isProfile: false
 }
 
-const market = ['/', '/market', '/product', '/profile']
+const market = ['/', '/market']
 
 export const useRouteCheck = (): CheckState => {
   const [check, setCheck] = useState<CheckState>(checkState)
@@ -22,9 +24,10 @@ export const useRouteCheck = (): CheckState => {
   useEffect(() => {
     const {pathname} = location
     const state: CheckState = {
-      isMarket: market.includes(pathname),
-      isOffer: pathname === '/offer',
-      isRules: pathname === '/rules'
+      isMarket: market.includes(pathname) || pathname.indexOf('/bid') >= 0,
+      isOffer: pathname.indexOf('/offer') >= 0,
+      isRules: pathname === '/rules',
+      isProfile: pathname === '/profile'
     }
     setCheck(state)
   }, [location])
@@ -51,11 +54,16 @@ export const useToBid = (bidId: string) => {
   }
 }
 
-export const useToProfile = () => {
+export const useToProfile = (accountId?: string) => {
   const history = useHistory()
   
   return () => {
-    history.push(`/profile`)
+    if (accountId) {
+      history.push(`/profile/${accountId}`)
+    } else {
+      history.push(`/profile`)
+    }
+    
   }
 }
 

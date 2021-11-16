@@ -42,7 +42,7 @@ const ClaimBtn = ({ bidInfo, near, nowTime }: { bidInfo: IBid, near: INearProps,
     !claimedBy ? (
       <ColoredButton onClick={claimBid} disabled={!near.signedAccountId}>Claim for <BalanceInvertIcon /> {claimPrice.toFixed(5)}</ColoredButton>
     ) : (
-      <WillButton big>
+      <WillButton>
         <WillPrefix>Will be claimed after</WillPrefix>
         <Moment date={claimedTime} format='hh:mm:ss' add={{ seconds: near.config.claimPeriod }} duration={nowTime} />
       </WillButton>

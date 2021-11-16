@@ -13,7 +13,6 @@ export const MarketTable = ({ near, limit, isClaimed, filterActiveBids }: { near
 
   async function getBets() {
     const lastKey = feed && feed.length > 0 ? feed[feed.length - 1] : null
-    console.log(lastKey, limit)
     const bets = isClaimed ? 
       await near.api.get_top_claims(lastKey, limit) : 
       await near.api.get_top_bets(lastKey, limit)

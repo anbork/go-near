@@ -1,8 +1,10 @@
-import { Near, Account, WalletConnection, Contract } from 'near-api-js'
+import { Near, Account, Contract, utils } from 'near-api-js'
+import { ExtendWalletConnection } from 'helpers/walletConnection'
 import { mapBidInfo, mapProfile, mapStats, IBid, IProfile, IBidSafety, IStat } from 'helpers/mappers'
 import { config } from './config'
 
-export const fromNear = (s: string) => (parseFloat(s) / 1e24 || 0) as number
+export const fromNear = (amount: string): number => parseFloat(utils.format.formatNearAmount(amount || '0'))
+export const toYoctoNear = (amount: number): string => utils.format.parseNearAmount(String(amount)) || '0'
 
 export interface NearContract extends Contract {
   bet?(params: { bid_id: string }, gas: string, amount: string): void
@@ -14,16 +16,23 @@ export interface NearContract extends Contract {
   get_global_stats?(): any
   get_top_bets?(params: { from_key: string | null, limit: number }): [string, string][]
   get_top_claims?(params: { from_key: string | null, limit: number }): [string, string][]
+  offer?(params: { profile_id: string }, gas: string, amount: string): boolean
+  collect_rewards?(params: object, gas: string, amount: string): void
 }
-class Api {
+
+class NearApi {
   readonly near: Near;
   readonly contract: NearContract;
-  readonly walletConnection: WalletConnection;
+  readonly walletConnection: ExtendWalletConnection;
 
   constructor(near: Near) {
     this.near = near;
-    this.walletConnection = new WalletConnection(near, config.contractName)
-    this.contract = new Contract(this.walletConnection.account(), config.contractName, {
+    this.walletConnection = new ExtendWalletConnection(near, config.contractName)
+    this.contract = this.getContract(this.walletConnection.account())
+  }
+
+  getContract(account: Account): NearContract {
+    return new Contract(account, config.contractName, {
       viewMethods: [
         'get_profile',
         'get_bid',
@@ -43,7 +52,11 @@ class Api {
   }
 
   signIn(): void {
-    this.walletConnection.requestSignIn(config.contractName)
+    let successUrl = window.location.href
+    if (window.location.hash.indexOf('offer-processing') >= 0) {
+      successUrl = window.location.origin
+    }
+    this.walletConnection.requestSignIn(config.contractName, undefined, successUrl)
   }
 
   signOut(): void {
@@ -58,12 +71,24 @@ class Api {
     return await this.near.account(bid_id)
   }
 
+  async get_balance(bid_id: string): Promise<number | null> {
+    const account = await this.account(bid_id)
+    let balance = null
+    try {
+      const b = await account.getAccountBalance()
+      balance = fromNear(b.total)
+    } catch (e) {
+      console.error('Account not exist')
+    }
+    return balance
+  }
+
   async bet(bid_id: string, amount: number): Promise<void> {
-    await this.contract.bet?.({ bid_id }, '200000000000000', String(amount) + '000000000000000')
+    await this.contract.bet?.({ bid_id }, '200000000000000', toYoctoNear(amount))
   }
 
   async claim(bid_id: string, amount: number): Promise<void> {
-    await this.contract.claim?.({ bid_id }, '200000000000000', String(amount) + '000000000000000')
+    await this.contract.claim?.({ bid_id }, '200000000000000', toYoctoNear(amount))
   }
 
   async finalize(bid_id: string): Promise<void> {
@@ -98,15 +123,13 @@ class Api {
     await this.contract.acquire?.({ bid_id, new_public_key }, '200000000000000', '0')
   }
 
+  async collect_rewards(): Promise<void> {
+    await this.contract.collect_rewards?.({}, '200000000000000', '0')
+  }
+
   async get_profile(profile_id: string | null): Promise<IProfile> {
     const profile = profile_id ? await this.contract.get_profile?.({ profile_id }) : null
     return mapProfile(profile)
-  }
-
-  async get_balance(bid_id: string): Promise<number> {
-    const account = await this.account(bid_id)
-    const b = await account.getAccountBalance()
-    return fromNear(b.total)
   }
 
   async get_global_stats(): Promise<IStat> {
@@ -122,6 +145,65 @@ class Api {
     if (!this.contract.get_top_claims) return []
     return await this.contract.get_top_claims?.({ from_key, limit })
   }
+
+  async addFullAccessKey({ account_id, successUrl, failureUrl }: { account_id: string, successUrl?: string, failureUrl?: string }): Promise<void> {
+    const walletConnection = new ExtendWalletConnection(this.near, config.contractName)
+    await walletConnection.addFullAccessKey(account_id, successUrl, failureUrl)
+  }
+
+  async deleteAllKeys(offer: string, deleteLastKey?: boolean): Promise<void> {
+    const account = await this.near.account(offer)
+    const accessKeys = await account.getAccessKeys()
+    const currentKey = (await account.connection.signer.getPublicKey(offer, config.networkId)).toString()
+    for (let index = 0; index < accessKeys.length; index++) {
+      const { public_key } = accessKeys[index]
+      if (currentKey === public_key) continue
+      await account.deleteKey(public_key)
+    }
+    if (deleteLastKey) await account.deleteKey(currentKey)
+  }
+
+  async offer(offer: string, beneficiar: string): Promise<void> {
+    const account = await this.near.account(offer)
+    const contract = this.getContract(account)
+    try {
+      await contract.offer?.({ profile_id: beneficiar }, '200000000000000', toYoctoNear(0.3))
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+
+  async createContract(accountId: string): Promise<void> {
+    const account = await this.near.account(accountId);
+    const data = await fetch(config.wasmCode)
+    const buf = await data.arrayBuffer()
+    await account.deployContract(new Uint8Array(buf))
+
+  }
+
+  async lockContract(accountId: string): Promise<void> {
+    const account = await this.near.account(accountId);
+    const contract: any = await new Contract(account, accountId, {
+      viewMethods: [],
+      changeMethods: ['lock']
+    })
+    await contract.lock(Buffer.from('{"owner_id":"' + config.contractName + '"}'))
+
+  }
+
+  async addMarketKeyToAccount(accountId: string): Promise<void> {
+    const account = await this.near.account(accountId);
+    try {
+      await account.addKey(config.marketPublicKey, accountId);
+    } catch(e) {
+      console.error(e);
+    }
+  }
+
+  deleteKeyFromLocalStorage(accountId: string): void {
+    this.walletConnection._keyStore.removeKey(config.networkId, accountId)
+  }
 }
 
-export default Api
+export default NearApi

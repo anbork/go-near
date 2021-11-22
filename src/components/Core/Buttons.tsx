@@ -3,38 +3,39 @@ import styled from 'styled-components'
 
 import {break_down} from 'helpers/media'
 
-const byBigBack = (big?: boolean) => big ? '' : `
-  height: 40px;
-  line-height: 40px;
-  border-radius: 10px;
-`
-
-const byBigBase = (big?: boolean) => big ? '' : `
-  height: 38px;
-  line-height: 38px;
-  border-radius: 9px;
-  font-weight: 600;
-  font-size: 13px;
-`
-
-const BorderButtonBack = styled.div<{big?: boolean}>`
+const BorderButtonBack = styled.div<{ small?: boolean}>`
+  ${({ small }) => small ?`
+  height: 48px;
+  line-height: 48px;  
+  border-radius: 11px;
+  `:`
   height: 67px;
   line-height: 67px;
-  background: linear-gradient(to right, rgba(235, 234, 255, 1), rgba(207, 226, 255, 1), rgba(218, 222, 255, 1), rgba(255, 200, 249, 1));
   border-radius: 17px;
+  `}
+  background: linear-gradient(to right, rgba(235, 234, 255, 1), rgba(207, 226, 255, 1), rgba(218, 222, 255, 1), rgba(255, 200, 249, 1));
+
 
   @media (max-width: ${break_down}) {
-    ${({big}) => byBigBack(big)}
+    height: 40px;
+    line-height: 40px;
+    border-radius: 10px;
   }
 `
 
-const BorderButtonBase = styled.div<{big?: boolean}>`
+const BorderButtonBase = styled.div<{ small?: boolean}>`
   margin: 1px;
   background: var(--root-background);
-  border-radius: 16px;
   text-align: center;
+  ${({ small }) => small ? `
+  height: 46px;
+  line-height: 46px;
+  border-radius: 10px;
+  `: `
   height: 65px;
   line-height: 65px;
+  border-radius: 16px;
+  `}
   font-weight: bold;
   font-size: 16px;
   border: none;
@@ -46,26 +47,30 @@ const BorderButtonBase = styled.div<{big?: boolean}>`
   justify-content: center;
 
   @media (max-width: ${break_down}) {
-    ${({big}) => byBigBase(big)}
+    height: 38px;
+    line-height: 38px;
+    border-radius: 9px;
+    font-weight: 600;
+    font-size: 13px;
   }
 `
 
-export const BorderButton: FC<{className?: any, onClick?: any, big?: boolean}> =
-  ({children, className, onClick, big}) => (
-  <BorderButtonBack className={className} big={big}>
-    <BorderButtonBase onClick={onClick} big={big}>{children}</BorderButtonBase>
+export const BorderButton: FC<{ className?: any, onClick?: any, small?: boolean}> =
+  ({ children, className, onClick, small}) => (
+  <BorderButtonBack className={className} small={small}>
+    <BorderButtonBase onClick={onClick} small={small}>{children}</BorderButtonBase>
   </BorderButtonBack>
 )
 
-const byBigGrey = (big?: boolean) => big ? '' : `
-  font-size: 12px;
-  font-weight: normal;
-`
-
-export const GreyButton = styled.div<{big?: boolean}>`
+export const GreyButton = styled.button<{ small?: boolean}>`
+  ${({ small }) => small ? `
+  height: 48px;
+  border-radius: 11px;
+  `: `
   height: 67px;
-  background: #2C3139;
   border-radius: 17px;
+  `}
+  background: #2C3139;
   font-weight: bold;
   font-size: 16px;
   border: none;
@@ -77,7 +82,8 @@ export const GreyButton = styled.div<{big?: boolean}>`
   justify-content: center;
 
   @media (max-width: ${break_down}) {
-    ${({big}) => byBigGrey(big)}
+    font-size: 12px;
+    font-weight: normal;
   }
 `
 

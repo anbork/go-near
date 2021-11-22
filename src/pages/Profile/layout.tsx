@@ -10,6 +10,7 @@ import coin_min_png from 'assets/images/coin_min.png'
 import cup_min_png from 'assets/images/cup_min.png'
 import {MoneyIcon as MoneyIconBase} from 'components/Icons'
 import {break_down} from 'helpers/media'
+import { GreyButton } from 'components/Core'
 
 export const Container = styled.div`
   margin: 0 var(--margin) 150px;
@@ -238,7 +239,46 @@ export const MoneyIcon = styled(MoneyIconBase)`
   }
 `
 
-export const Value = styled.div`
+export const InlineMoneyIcon = styled(MoneyIcon)`
+  position: relative;
+  top: 5px;
+`
+
+export const DetailsButton = styled<{ small?: boolean } | any>(GreyButton)`
+  margin-left: 26px;
+  height: auto;
+  padding: 22px 30px;
+  margin-top: 7px;
+  background: #b8cae7;
+  color: #000;
+  width: 226px;
+
+  &:disabled {
+    opacity: 0.2;
+    pointer-events: none;
+  }
+
+  @media (max-width: ${break_down}) {
+    padding: 16px 12px;
+  }
+`
+
+export const LowRewards = styled.div`
+  font-size: 19px;
+
+  @media (max-width: ${break_down}) {
+    font-size: 13px;
+  }
+`
+
+export const Collect = styled.div`
+  margin: 15px 0 0 0;
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+`
+
+export const Value = styled.span`
   margin-left: 9px;
   font-weight: 600;
   font-size: 21px;
@@ -265,6 +305,7 @@ export const TableHeaders = styled.div`
 export const TableHeader = styled.div<{active?: boolean}>`
   display: flex;
   align-items: start;
+  cursor: pointer;
   ${({active}) => active ? 'color: #FFFFFF;' : 'color: #8C95A6;'}
 
   &:not(:first-child) {

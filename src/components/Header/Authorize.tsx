@@ -1,16 +1,16 @@
-import { FC, useContext, Dispatch } from 'react'
+import { Dispatch } from 'react'
 import { useToProfile } from 'helpers/routes'
 import { 
   Auth,
   UserName,
   LogOut,
 } from './layout'
-import { NearContext, INearProps } from 'helpers/near'
+import { 
+  INearProps } from 'helpers/near'
 
-const Authorize: FC = () => {
+const Authorize = ({ near, setNear }: { near: INearProps | null, setNear: Dispatch<INearProps | null> }) => {
   const toProfile = useToProfile()
-  const { near, setNear }: { near: INearProps | null, setNear: Dispatch<INearProps | null> } = useContext(NearContext)
-
+  
   if (!near) return null;
 
   const { api, signedIn, signedAccountId } = near

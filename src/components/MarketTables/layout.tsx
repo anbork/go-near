@@ -20,8 +20,8 @@ export const Table = styled.div`
   }
 `
 
-export const Row = styled.div`
-  height: 125px;
+export const Row = styled.div<{ small?: boolean }>`
+  height: ${({ small }) => small ? '95px' : '125px' };
   border-bottom: 1px solid #3F4450;
   display: flex;
   justify-content: stretch;
@@ -39,10 +39,10 @@ export const Row = styled.div`
   }
 `
 
-export const Client = styled.div`
+export const Client = styled.div<{ small?: boolean }>`
   flex: 1 0;
   font-weight: bold;
-  font-size: 30px;
+  font-size: ${({small}) => small ? '18px' : '30px' };
   cursor: pointer;
 
   @media (max-width: ${break_down}) {
@@ -113,7 +113,7 @@ export const Button = styled(RainbowButton)`
   }
 `
 
-export const DetailsButton = styled(GreyButton)`
+export const DetailsButton = styled<{ small?: boolean } | any>(GreyButton)`
   margin-left: 26px;
   width: 228px;
 
@@ -165,10 +165,10 @@ export const MoneyIcon = styled(MoneyIconBase)`
   margin: 0 8px;
 `
 
-export const StartsButton = styled(BorderButton)`
+export const StartsButton = styled<{ small?: boolean } | any>(BorderButton)`
   margin-left: 26px;
   width: 228px;
-
+  
   @media (max-width: ${break_down}) {
     margin-left: 0;
     width: 180px;

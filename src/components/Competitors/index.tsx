@@ -15,7 +15,7 @@ import { IBid } from 'helpers/mappers'
 
 
 const Competitors = ({ bidInfo }: { bidInfo: IBid }) => {
-  const toProfile = useToProfile();
+  const toProfile = useToProfile(bidInfo.bets?.[0]);
 
   if (!bidInfo.bets || !bidInfo.bets.length) return null
 

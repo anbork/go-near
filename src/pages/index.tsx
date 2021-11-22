@@ -1,5 +1,5 @@
 export {Market} from './Market'
-export {Offer} from './Offer'
+export {Offer, OfferProcessing} from './Offer'
 export {Bid} from './Bid'
 export {Profile} from './Profile'
 export {Rules} from './Rules'
